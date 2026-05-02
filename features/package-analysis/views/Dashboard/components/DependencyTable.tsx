@@ -5,7 +5,7 @@ import { IconSearch } from "@/components/ui/icons";
 import type { Dependency, RiskLevel } from "../../../types";
 import type { SortKey } from "../hooks/useDependencyTable";
 import { DependencyRow } from "./DependencyRow";
-import styles from "../../Dashboard.module.scss";
+import styles from "./DependencyTable.module.scss";
 
 const RISK_FILTERS: Array<{ id: RiskLevel | "all"; label: string }> = [
   { id: "all", label: "All" },

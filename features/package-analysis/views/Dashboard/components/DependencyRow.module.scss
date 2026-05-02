@@ -1,0 +1,176 @@
+.rowExpanded {
+  background: var(--bg-elev-2);
+}
+
+.expandRowCell {
+  padding: 0 !important;
+  background: var(--bg-elev-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.pkg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chevron {
+  color: var(--text-subtle);
+  transition: transform 0.15s;
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+  color: var(--accent);
+}
+
+.pkgName {
+  font-family: var(--font-mono, monospace);
+  font-weight: 500;
+}
+
+.pkgType {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.version {
+  font-family: var(--font-mono, monospace);
+  color: var(--text-muted);
+}
+
+.fixedIn {
+  margin-left: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.vulnCount {
+  font-family: var(--font-mono, monospace);
+  font-weight: 500;
+}
+
+.vulnCountZero {
+  color: var(--text-subtle);
+}
+
+.vulnCountHas {
+  color: var(--text);
+}
+
+.rec {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.cve {
+  padding: 18px 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cveHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cveTitle {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+.cveList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cveItem {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--bg-elev-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cveId {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.cveSummary {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.cveMeta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.cvss {
+  font-family: var(--font-mono, monospace);
+  font-weight: 500;
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+  .cve {
+    padding: 16px 18px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pkg {
+    gap: 6px;
+  }
+  .pkgName {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+  .pkgType {
+    display: none;
+  }
+  .cve {
+    padding: 14px 14px 18px;
+  }
+  .cveItem {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px;
+  }
+  .cveMeta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

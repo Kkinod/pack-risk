@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.2.1] - 05-02-2026
+
+### Added
+
+- Responsiveness
+
+### Changed
+
+- Split dashboard scss
+
 ## [0.2.0] - 05-02-2026
 
 ### Added
