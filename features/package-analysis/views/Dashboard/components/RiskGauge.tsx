@@ -1,5 +1,5 @@
 import { scoreToMeta } from "../../../utils/risk";
-import styles from "../../Dashboard.module.scss";
+import styles from "./RiskGauge.module.scss";
 
 export function RiskGauge({ score }: { score: number }) {
   const meta = scoreToMeta(score);

@@ -129,3 +129,28 @@
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 900px) {
+  .card {
+    padding: 28px 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .loading {
+    padding: 28px 14px;
+  }
+  .card {
+    padding: 22px 20px;
+  }
+  .title {
+    font-size: 19px;
+  }
+  .step {
+    font-size: 13px;
+    gap: 10px;
+  }
+  .stepMeta {
+    font-size: 10px;
+  }
+}

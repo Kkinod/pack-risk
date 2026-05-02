@@ -117,3 +117,55 @@
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 900px) {
+  .topbar {
+    padding: 12px 18px;
+    gap: 12px;
+  }
+  .brandTag {
+    display: none;
+  }
+  .navStep {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .brand {
+    gap: 10px;
+  }
+  .brandName {
+    font-size: 14px;
+  }
+  .brandMark {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+  .nav {
+    gap: 6px;
+  }
+  .navStep {
+    padding: 6px;
+    font-size: 0;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    opacity: 0.4;
+  }
+  .navStepActive .dot {
+    opacity: 1;
+  }
+  .navSep {
+    display: none;
+  }
+  .themeToggle {
+    margin-left: 4px;
+  }
+}

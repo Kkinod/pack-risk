@@ -3,7 +3,7 @@
 import { IconChevronRight, IconAlert } from "@/components/ui/icons";
 import type { Dependency, RiskLevel } from "../../../types";
 import { RiskTag } from "./RiskTag";
-import styles from "../../Dashboard.module.scss";
+import styles from "./DependencyRow.module.scss";
 
 export function DependencyRow({
   dep,

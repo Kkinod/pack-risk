@@ -1,6 +1,6 @@
 import { riskLevelMeta } from "../../../utils/risk";
 import type { RiskLevel } from "../../../types";
-import styles from "../../Dashboard.module.scss";
+import styles from "./RiskTag.module.scss";
 
 export function RiskTag({ level }: { level: RiskLevel }) {
   const meta = riskLevelMeta(level);
