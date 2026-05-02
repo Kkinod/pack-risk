@@ -101,28 +101,6 @@ This project is created as part of an engineering thesis focused on cybersecurit
 
 The application is intended to demonstrate the design and implementation of a web-based system supporting dependency risk assessment in JavaScript/Node.js projects.
 
-## Changelog
-
-All notable changes to this project will be documented in this section.
-
-### Unreleased
-
-#### Added
-
-- Initial Next.js project setup
-- TypeScript configuration
-- SCSS Modules setup
-- Basic project structure
-- Husky pre-commit configuration
-
-#### Changed
-
-- Replaced Tailwind CSS with SCSS Modules
-
-#### Removed
-
-- Removed unused Tailwind CSS configuration
-
 ## License
 
 This project is licensed under the MIT License.
