@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pack Risk
+
+Pack Risk is a web application for analyzing security risks in JavaScript/Node.js project dependencies based on a `package.json` file.
+
+The project is developed as part of an engineering thesis in Computer Science, specialization in Cybersecurity.
+
+## Project Overview
+
+The main goal of the application is to help users quickly understand potential risks related to project dependencies without requiring them to set up or run the analyzed project locally.
+
+The application allows users to provide a `package.json` file or its content, validate its structure, extract dependency information, analyze potential security risks, and present the results in a clear and understandable report.
+
+The target users are mainly developers, but the application should also be understandable for less technical users, such as project managers, testers, or people who want to quickly assess dependency-related risk in a project.
+
+## Core Features
+
+- Upload or paste `package.json` content
+- Validate package manifest structure
+- Extract dependencies from the provided file
+- Analyze dependency-related security risks
+- Display dependency risk summary
+- Present results in a clear report view
+- Support future extension with scoring, AI-based interpretation, and update recommendations
+
+## Tech Stack
+
+- Next.js
+- TypeScript
+- SCSS Modules
+- pnpm
+- ESLint
+- Husky
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run the development server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run type checking:
 
-## Learn More
+```bash
+pnpm typecheck
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run linting:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Build the application:
 
-## Deploy on Vercel
+```bash
+pnpm build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```txt
+app/                         # Next.js App Router pages and API routes
+components/                  # Shared reusable components
+features/                    # Feature-based application modules
+features/package-analysis/   # Main feature for package.json analysis
+public/                      # Static assets
+```
+
+## Development Guidelines
+
+The application is developed with a modular structure.
+
+Code should be split into smaller components, hooks, utilities, and modules when it improves readability, maintainability, testability, or reusability.
+
+The project follows a use-case-oriented structure rather than grouping code only by generic domain nouns. For example, modules should be organized around responsibilities such as package validation, dependency analysis, risk calculation, report generation, and result presentation.
+
+## Future Development
+
+The current version is focused on the engineering thesis scope, but the architecture should allow further development in the future.
+
+Possible future extensions include:
+
+- Advanced dependency risk scoring
+- AI-based vulnerability interpretation
+- Dependency update recommendations
+- Analysis history
+- More detailed reporting
+- Support for additional package ecosystems
+- Integration with external vulnerability databases
+
+## Thesis Context
+
+This project is created as part of an engineering thesis focused on cybersecurity and software dependency risk analysis.
+
+The application is intended to demonstrate the design and implementation of a web-based system supporting dependency risk assessment in JavaScript/Node.js projects.
+
+## Changelog
+
+All notable changes to this project will be documented in this section.
+
+### Unreleased
+
+#### Added
+
+- Initial Next.js project setup
+- TypeScript configuration
+- SCSS Modules setup
+- Basic project structure
+- Husky pre-commit configuration
+
+#### Changed
+
+- Replaced Tailwind CSS with SCSS Modules
+
+#### Removed
+
+- Removed unused Tailwind CSS configuration
+
+## License
+
+This project is licensed under the MIT License.
+
+```
+
+```

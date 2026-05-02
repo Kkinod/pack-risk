@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Upload from "@/features/package-analysis/screens/Upload";
-import Loading from "@/features/package-analysis/screens/Loading";
-import Dashboard from "@/features/package-analysis/screens/Dashboard";
+import Upload from "@/features/package-analysis/views/Upload";
+import Loading from "@/features/package-analysis/views/Loading";
+import Dashboard from "@/features/package-analysis/views/Dashboard";
 import { MOCK_REPORT } from "@/features/package-analysis/data/mockData";
 import type { Screen, AnalysisReport } from "@/features/package-analysis/types";
 import styles from "./AppShell.module.scss";
