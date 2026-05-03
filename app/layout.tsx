@@ -13,7 +13,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dependency Risk Analyzer",
+  title: "PackRisk",
   description: "Analyze package.json for security risks",
 };
 

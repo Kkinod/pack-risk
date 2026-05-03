@@ -54,9 +54,9 @@ export default function AppShell() {
     <div className={styles.app}>
       <header className={styles.topbar}>
         <div className={styles.brand}>
-          <div className={styles.brandMark}>DR</div>
+          <div className={styles.brandMark}>PR</div>
           <div>
-            <div className={styles.brandName}>Dependency Risk Analyzer</div>
+            <div className={styles.brandName}>PackRisk</div>
           </div>
           <span className={styles.brandTag}>v0.1 · MVP</span>
         </div>
