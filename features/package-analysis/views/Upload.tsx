@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import { IconUpload, IconFile, IconX, IconShield } from "@/components/ui/icons";
 import { SAMPLE_PACKAGE_JSON } from "../data/mockData";
+import { t } from "@/locales";
 import styles from "./Upload.module.scss";
 
 interface UploadProps {
@@ -18,7 +19,7 @@ export default function Upload({ onAnalyze }: UploadProps) {
 
   const readFile = useCallback((file: File) => {
     if (!file.name.endsWith(".json")) {
-      setError("Please upload a .json file.");
+      setError(t.upload.errors.jsonFileOnly);
       return;
     }
     const reader = new FileReader();
@@ -58,13 +59,13 @@ export default function Upload({ onAnalyze }: UploadProps) {
 
   const start = () => {
     if (!pasted.trim()) {
-      setError("Upload a file or paste package.json content first.");
+      setError(t.upload.errors.emptyContent);
       return;
     }
     try {
       JSON.parse(pasted);
     } catch {
-      setError("Invalid JSON. Please check the file content.");
+      setError(t.upload.errors.invalidJson);
       return;
     }
     onAnalyze({ fileName: fileName || "package.json", content: pasted });
@@ -76,16 +77,9 @@ export default function Upload({ onAnalyze }: UploadProps) {
     <section className={styles.upload}>
       <div className={styles.card}>
         <header className={styles.header}>
-          <div className={styles.eyebrow}>Step 1 — Source</div>
-          <h1 className={styles.title}>
-            Analyze your package.json for security risk
-          </h1>
-          <p className={styles.subtitle}>
-            Upload a <code>package.json</code> file and we&apos;ll
-            cross-reference its dependencies against public vulnerability
-            databases to surface critical issues, outdated packages, and
-            recommended fixes.
-          </p>
+          <div className={styles.eyebrow}>{t.upload.eyebrow}</div>
+          <h1 className={styles.title}>{t.upload.title}</h1>
+          <p className={styles.subtitle}>{t.upload.subtitle}</p>
         </header>
 
         <div className={styles.body}>
@@ -115,7 +109,7 @@ export default function Upload({ onAnalyze }: UploadProps) {
                 <button
                   className={styles.clearBtn}
                   onClick={clear}
-                  aria-label="Remove file"
+                  aria-label={t.upload.dropzone.removeFile}
                 >
                   <IconX size={14} />
                 </button>
@@ -126,36 +120,34 @@ export default function Upload({ onAnalyze }: UploadProps) {
                   <IconUpload size={20} />
                 </div>
                 <div className={styles.dropzoneTitle}>
-                  Drop package.json here
+                  {t.upload.dropzone.title}
                 </div>
                 <div className={styles.dropzoneSub}>
-                  or click to browse — .json files only
+                  {t.upload.dropzone.sub}
                 </div>
               </>
             )}
           </div>
 
-          <div className={styles.divider}>or paste content</div>
+          <div className={styles.divider}>{t.upload.divider}</div>
 
           <div className={styles.codeInput}>
             <label htmlFor="paste">
-              <span>package.json content</span>
+              <span>{t.upload.contentLabel}</span>
               <span className={styles.labelMeta}>
                 <button
                   type="button"
                   className={styles.sampleBtn}
                   onClick={useSample}
                 >
-                  Load sample →
+                  {t.upload.loadSample}
                 </button>
               </span>
             </label>
             <textarea
               id="paste"
               spellCheck={false}
-              placeholder={
-                '{\n  "name": "my-app",\n  "dependencies": { ... }\n}'
-              }
+              placeholder={t.upload.placeholder}
               value={pasted}
               onChange={(e) => {
                 setPasted(e.target.value);
@@ -172,14 +164,14 @@ export default function Upload({ onAnalyze }: UploadProps) {
         <footer className={styles.footer}>
           <div className={styles.hint}>
             <IconShield size={14} />
-            <span>Your file is processed locally — nothing is uploaded.</span>
+            <span>{t.upload.hint}</span>
           </div>
           <button
             className="btn btn--primary btn--lg"
             onClick={start}
             disabled={!filled}
           >
-            Start analysis
+            {t.upload.startAnalysis}
           </button>
         </footer>
       </div>

@@ -6,6 +6,7 @@ import Loading from "@/features/package-analysis/views/Loading";
 import Dashboard from "@/features/package-analysis/views/Dashboard";
 import { MOCK_REPORT } from "@/features/package-analysis/data/mockData";
 import type { Screen, AnalysisReport } from "@/features/package-analysis/types";
+import { t } from "@/locales";
 import styles from "./AppShell.module.scss";
 
 export default function AppShell() {
@@ -56,27 +57,27 @@ export default function AppShell() {
         <div className={styles.brand}>
           <div className={styles.brandMark}>DR</div>
           <div>
-            <div className={styles.brandName}>Dependency Risk Analyzer</div>
+            <div className={styles.brandName}>{t.shell.brandName}</div>
           </div>
-          <span className={styles.brandTag}>v0.1 · MVP</span>
+          <span className={styles.brandTag}>{t.shell.brandTag}</span>
         </div>
-        <nav className={styles.nav} aria-label="Progress">
+        <nav className={styles.nav} aria-label={t.shell.nav.progressLabel}>
           <span
             className={`${styles.navStep} ${screen === "upload" ? styles.navStepActive : ""}`}
           >
-            <span className={styles.dot} /> Upload
+            <span className={styles.dot} /> {t.shell.nav.upload}
           </span>
           <span className={styles.navSep}>›</span>
           <span
             className={`${styles.navStep} ${screen === "loading" ? styles.navStepActive : ""}`}
           >
-            <span className={styles.dot} /> Analyze
+            <span className={styles.dot} /> {t.shell.nav.analyze}
           </span>
           <span className={styles.navSep}>›</span>
           <span
             className={`${styles.navStep} ${screen === "dashboard" ? styles.navStepActive : ""}`}
           >
-            <span className={styles.dot} /> Report
+            <span className={styles.dot} /> {t.shell.nav.report}
           </span>
           <button
             type="button"
@@ -84,8 +85,8 @@ export default function AppShell() {
             onClick={toggleTheme}
             aria-label={
               theme === "dark"
-                ? "Switch to light theme"
-                : "Switch to dark theme"
+                ? t.shell.theme.toLightLabel
+                : t.shell.theme.toDarkLabel
             }
           >
             {theme === "dark" ? (

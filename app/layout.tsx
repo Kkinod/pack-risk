@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { t } from "@/locales";
 import "./globals.scss";
 
 const inter = Inter({
@@ -13,8 +14,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dependency Risk Analyzer",
-  description: "Analyze package.json for security risks",
+  title: t.meta.title,
+  description: t.meta.description,
 };
 
 export default function RootLayout({

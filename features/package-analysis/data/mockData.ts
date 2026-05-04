@@ -1,10 +1,11 @@
 import type { AnalysisReport, AnalysisStep } from "../types";
+import { t } from "@/locales";
 
 export const ANALYSIS_STEPS: AnalysisStep[] = [
-  { id: "parse", label: "Parsing package.json", duration: 700 },
-  { id: "deps", label: "Resolving dependency tree", duration: 1100 },
-  { id: "vuln", label: "Querying vulnerability databases", duration: 1400 },
-  { id: "risk", label: "Calculating risk score", duration: 800 },
+  { id: "parse", label: t.loading.steps.parse, duration: 700 },
+  { id: "deps", label: t.loading.steps.deps, duration: 1100 },
+  { id: "vuln", label: t.loading.steps.vuln, duration: 1400 },
+  { id: "risk", label: t.loading.steps.risk, duration: 800 },
 ];
 
 export const SAMPLE_PACKAGE_JSON = `{

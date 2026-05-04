@@ -5,15 +5,16 @@ import { IconSearch } from "@/components/ui/icons";
 import type { Dependency, RiskLevel } from "../../../types";
 import type { SortKey } from "../hooks/useDependencyTable";
 import { DependencyRow } from "./DependencyRow";
+import { t } from "@/locales";
 import styles from "../../Dashboard.module.scss";
 
 const RISK_FILTERS: Array<{ id: RiskLevel | "all"; label: string }> = [
-  { id: "all", label: "All" },
-  { id: "critical", label: "Critical" },
-  { id: "high", label: "High" },
-  { id: "medium", label: "Medium" },
-  { id: "low", label: "Low" },
-  { id: "safe", label: "Safe" },
+  { id: "all", label: t.dashboard.depTable.filters.all },
+  { id: "critical", label: t.dashboard.depTable.filters.critical },
+  { id: "high", label: t.dashboard.depTable.filters.high },
+  { id: "medium", label: t.dashboard.depTable.filters.medium },
+  { id: "low", label: t.dashboard.depTable.filters.low },
+  { id: "safe", label: t.dashboard.depTable.filters.safe },
 ];
 
 interface DependencyTableProps {
@@ -50,7 +51,7 @@ export function DependencyTable({
           <IconSearch size={14} />
           <input
             type="text"
-            placeholder="Search packages…"
+            placeholder={t.dashboard.depTable.search}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -79,38 +80,38 @@ export function DependencyTable({
                 onClick={() => onSort("name")}
                 className={sortKey === "name" ? styles.sorted : ""}
               >
-                Package{" "}
+                {t.dashboard.depTable.cols.package}{" "}
                 <span className={styles.sortArrow}>{sortArrow("name")}</span>
               </th>
               <th
                 onClick={() => onSort("version")}
                 className={sortKey === "version" ? styles.sorted : ""}
               >
-                Version{" "}
+                {t.dashboard.depTable.cols.version}{" "}
                 <span className={styles.sortArrow}>{sortArrow("version")}</span>
               </th>
               <th
                 onClick={() => onSort("vulns")}
                 className={sortKey === "vulns" ? styles.sorted : ""}
               >
-                Vulnerabilities{" "}
+                {t.dashboard.depTable.cols.vulns}{" "}
                 <span className={styles.sortArrow}>{sortArrow("vulns")}</span>
               </th>
               <th
                 onClick={() => onSort("risk")}
                 className={sortKey === "risk" ? styles.sorted : ""}
               >
-                Risk{" "}
+                {t.dashboard.depTable.cols.risk}{" "}
                 <span className={styles.sortArrow}>{sortArrow("risk")}</span>
               </th>
-              <th>Recommendation</th>
+              <th>{t.dashboard.depTable.cols.recommendation}</th>
             </tr>
           </thead>
           <tbody>
             {visible.length === 0 && (
               <tr>
                 <td colSpan={5} className={styles.empty}>
-                  No packages match the current filters.
+                  {t.dashboard.depTable.empty}
                 </td>
               </tr>
             )}

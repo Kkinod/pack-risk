@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { IconCheck } from "@/components/ui/icons";
 import { ANALYSIS_STEPS } from "../data/mockData";
+import { t } from "@/locales";
 import styles from "./Loading.module.scss";
 
 interface LoadingProps {
@@ -31,15 +32,12 @@ export default function Loading({ onComplete }: LoadingProps) {
     <section className={styles.loading}>
       <div className={styles.card}>
         <header className={styles.header}>
-          <div className={styles.eyebrow}>Step 2 — Scan in progress</div>
-          <h2 className={styles.title}>Analyzing dependencies</h2>
-          <p className={styles.sub}>
-            This usually takes a few seconds. We&apos;re checking your packages
-            against the public vulnerability database.
-          </p>
+          <div className={styles.eyebrow}>{t.loading.eyebrow}</div>
+          <h2 className={styles.title}>{t.loading.title}</h2>
+          <p className={styles.sub}>{t.loading.subtitle}</p>
         </header>
 
-        <div className={styles.progress} aria-label="Progress">
+        <div className={styles.progress} aria-label={t.loading.progressLabel}>
           <div
             className={styles.progressBar}
             style={{ width: `${progress}%` }}
@@ -65,10 +63,10 @@ export default function Loading({ onComplete }: LoadingProps) {
                 <span>{s.label}</span>
                 <span className={styles.stepMeta}>
                   {status === "done"
-                    ? "✓ done"
+                    ? t.loading.status.done
                     : status === "active"
-                      ? "running…"
-                      : "queued"}
+                      ? t.loading.status.running
+                      : t.loading.status.queued}
                 </span>
               </li>
             );
