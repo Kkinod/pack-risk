@@ -1,5 +1,5 @@
 import type { Severity } from "../../../types";
-import styles from "../../Dashboard.module.scss";
+import styles from "./SeverityPill.module.scss";
 
 const colorMap: Record<Severity, string> = {
   critical: "var(--risk-critical)",

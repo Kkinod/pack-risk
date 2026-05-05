@@ -226,3 +226,66 @@
   padding: 8px 12px;
   border-radius: 6px;
 }
+
+@media (max-width: 900px) {
+  .header {
+    padding: 28px 28px 8px;
+  }
+  .body {
+    padding: 20px 28px 28px;
+  }
+  .footer {
+    padding: 16px 28px;
+  }
+  .title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 640px) {
+  .upload {
+    padding: 24px 14px;
+  }
+  .header {
+    padding: 22px 20px 6px;
+  }
+  .body {
+    padding: 16px 20px 22px;
+  }
+  .footer {
+    padding: 14px 20px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .footer :global(.btn) {
+    width: 100%;
+  }
+  .title {
+    font-size: 20px;
+    line-height: 1.25;
+  }
+  .subtitle {
+    font-size: 13px;
+  }
+  .dropzone {
+    padding: 24px 16px;
+  }
+  .dropzoneTitle {
+    font-size: 14px;
+  }
+  .dropzoneFile {
+    flex-wrap: wrap;
+    justify-content: center;
+    word-break: break-all;
+  }
+  .codeInput textarea {
+    font-size: 12px;
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 420px) {
+  .title {
+    font-size: 19px;
+  }
+}

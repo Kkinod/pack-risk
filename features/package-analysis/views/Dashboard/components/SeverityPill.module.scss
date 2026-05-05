@@ -1,0 +1,34 @@
+.severityPill {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--sev-color);
+}
+
+.pillCount {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--sev-color);
+  font-family: var(--font-mono, monospace);
+}
+
+.pillLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .severityPill {
+    padding: 8px 10px;
+  }
+  .pillCount {
+    font-size: 16px;
+  }
+}
