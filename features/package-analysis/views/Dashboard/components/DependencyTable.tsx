@@ -6,7 +6,7 @@ import type { Dependency, RiskLevel } from "../../../types";
 import type { SortKey } from "../hooks/useDependencyTable";
 import { DependencyRow } from "./DependencyRow";
 import { t } from "@/locales";
-import styles from "../../Dashboard.module.scss";
+import styles from "./DependencyTable.module.scss";
 
 const RISK_FILTERS: Array<{ id: RiskLevel | "all"; label: string }> = [
   { id: "all", label: t.dashboard.depTable.filters.all },
