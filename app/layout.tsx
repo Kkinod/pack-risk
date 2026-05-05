@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { t } from "@/locales";
+import { QueryProvider } from "@/lib/api/queryClient";
 import "./globals.scss";
 
 const inter = Inter({
@@ -13,8 +15,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PackRisk",
-  description: "Analyze package.json for security risks",
+  title: t.meta.title,
+  description: t.meta.description,
 };
 
 export default function RootLayout({
@@ -28,7 +30,9 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <body>{children}</body>
+      <body>
+        <QueryProvider>{children}</QueryProvider>
+      </body>
     </html>
   );
 }

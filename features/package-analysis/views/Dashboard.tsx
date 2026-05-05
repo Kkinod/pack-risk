@@ -7,6 +7,7 @@ import { useDependencyTable } from "./Dashboard/hooks/useDependencyTable";
 import { RiskGauge } from "./Dashboard/components/RiskGauge";
 import { SeverityPill } from "./Dashboard/components/SeverityPill";
 import { DependencyTable } from "./Dashboard/components/DependencyTable";
+import { t } from "@/locales";
 import styles from "./Dashboard.module.scss";
 
 interface DashboardProps {
@@ -27,28 +28,30 @@ export default function Dashboard({
     <section className={styles.dash} data-density={density}>
       <header className={styles.header}>
         <div className={styles.heading}>
-          <h1>Security report</h1>
+          <h1>{t.dashboard.title}</h1>
           <div className={styles.meta}>
             <span className={styles.file}>{report.fileName}</span>
-            <span>· project: {report.projectName}</span>
+            <span>
+              · {t.dashboard.projectLabel}: {report.projectName}
+            </span>
             <span>· {new Date(report.analyzedAt).toLocaleString()}</span>
           </div>
         </div>
         <div className={styles.actions}>
           <button className="btn">
             <IconDownload size={14} />
-            Export report
+            {t.dashboard.exportReport}
           </button>
           <button className="btn" onClick={onReset}>
             <IconRefresh size={14} />
-            New analysis
+            {t.dashboard.newAnalysis}
           </button>
         </div>
       </header>
 
       <div className={styles.overview}>
         <div className={styles.panel}>
-          <h3 className={styles.panelTitle}>Overall risk score</h3>
+          <h3 className={styles.panelTitle}>{t.dashboard.panels.riskScore}</h3>
           <div
             className={styles.riskScore}
             style={
@@ -68,11 +71,13 @@ export default function Dashboard({
         </div>
 
         <div className={styles.panel}>
-          <h3 className={styles.panelTitle}>Dependencies</h3>
+          <h3 className={styles.panelTitle}>
+            {t.dashboard.panels.dependencies}
+          </h3>
           <div className={styles.stat}>
             <span className={styles.statValue}>{report.totalDependencies}</span>
             <span className={styles.statSub}>
-              {report.vulnerableDependencies} with known vulnerabilities
+              {report.vulnerableDependencies} {t.dashboard.stats.withVulns}
             </span>
             <div
               style={{
@@ -87,41 +92,43 @@ export default function Dashboard({
               <IconShield size={14} />
               <span>
                 {report.totalDependencies - report.vulnerableDependencies}{" "}
-                packages clean
+                {t.dashboard.stats.packagesClean}
               </span>
             </div>
           </div>
         </div>
 
         <div className={styles.panel}>
-          <h3 className={styles.panelTitle}>Vulnerabilities by severity</h3>
+          <h3 className={styles.panelTitle}>
+            {t.dashboard.panels.vulnerabilities}
+          </h3>
           <div className={styles.stat}>
             <span className={styles.statValue}>
               {report.totalVulnerabilities}
             </span>
             <span className={styles.statSub}>
-              across {report.vulnerableDependencies} packages
+              {t.dashboard.stats.acrossPackages(report.vulnerableDependencies)}
             </span>
             <div className={styles.breakdown}>
               <SeverityPill
                 sev="critical"
                 count={report.severityBreakdown.critical}
-                label="Critical"
+                label={t.risk.critical.label}
               />
               <SeverityPill
                 sev="high"
                 count={report.severityBreakdown.high}
-                label="High"
+                label={t.risk.high.label}
               />
               <SeverityPill
                 sev="medium"
                 count={report.severityBreakdown.medium}
-                label="Medium"
+                label={t.risk.medium.label}
               />
               <SeverityPill
                 sev="low"
                 count={report.severityBreakdown.low}
-                label="Low"
+                label={t.risk.low.label}
               />
             </div>
           </div>

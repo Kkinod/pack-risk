@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Upload from "@/features/package-analysis/views/Upload";
 import Loading from "@/features/package-analysis/views/Loading";
 import Dashboard from "@/features/package-analysis/views/Dashboard";
-import { MOCK_REPORT } from "@/features/package-analysis/data/mockData";
+import { useAnalyze } from "@/features/package-analysis/api/useAnalyze";
 import type { Screen, AnalysisReport } from "@/features/package-analysis/types";
+import { t } from "@/locales";
 import styles from "./AppShell.module.scss";
 
 export default function AppShell() {
   const [screen, setScreen] = useState<Screen>("upload");
-  const [pendingFile, setPendingFile] = useState<{
-    fileName: string;
-    content: string;
-  } | null>(null);
+  const analyze = useAnalyze();
+  const pendingPromise = useRef<Promise<AnalysisReport> | null>(null);
+
   const [theme, setTheme] = useState<string>(() => {
     if (typeof window === "undefined") return "dark";
     try {
@@ -35,20 +35,32 @@ export default function AppShell() {
   };
 
   const onAnalyze = (input: { fileName: string; content: string }) => {
-    setPendingFile(input);
+    analyze.reset();
+    pendingPromise.current = analyze.mutateAsync(input);
+    pendingPromise.current.catch(() => {});
     setScreen("loading");
   };
 
-  const onComplete = () => setScreen("dashboard");
+  const onComplete = async () => {
+    try {
+      await pendingPromise.current;
+      setScreen("dashboard");
+    } catch {
+      setScreen("upload");
+    } finally {
+      pendingPromise.current = null;
+    }
+  };
 
   const onReset = () => {
-    setPendingFile(null);
+    analyze.reset();
     setScreen("upload");
   };
 
-  const report: AnalysisReport = pendingFile
-    ? { ...MOCK_REPORT, fileName: pendingFile.fileName }
-    : MOCK_REPORT;
+  const serverError =
+    analyze.isError && screen === "upload"
+      ? t.upload.errors.analysisFailed
+      : undefined;
 
   return (
     <div className={styles.app}>
@@ -56,27 +68,27 @@ export default function AppShell() {
         <div className={styles.brand}>
           <div className={styles.brandMark}>PR</div>
           <div>
-            <div className={styles.brandName}>PackRisk</div>
+            <div className={styles.brandName}>{t.shell.brandName}</div>
           </div>
-          <span className={styles.brandTag}>v0.1 · MVP</span>
+          <span className={styles.brandTag}>{t.shell.brandTag}</span>
         </div>
-        <nav className={styles.nav} aria-label="Progress">
+        <nav className={styles.nav} aria-label={t.shell.nav.progressLabel}>
           <span
             className={`${styles.navStep} ${screen === "upload" ? styles.navStepActive : ""}`}
           >
-            <span className={styles.dot} /> Upload
+            <span className={styles.dot} /> {t.shell.nav.upload}
           </span>
           <span className={styles.navSep}>›</span>
           <span
             className={`${styles.navStep} ${screen === "loading" ? styles.navStepActive : ""}`}
           >
-            <span className={styles.dot} /> Analyze
+            <span className={styles.dot} /> {t.shell.nav.analyze}
           </span>
           <span className={styles.navSep}>›</span>
           <span
             className={`${styles.navStep} ${screen === "dashboard" ? styles.navStepActive : ""}`}
           >
-            <span className={styles.dot} /> Report
+            <span className={styles.dot} /> {t.shell.nav.report}
           </span>
           <button
             type="button"
@@ -84,8 +96,8 @@ export default function AppShell() {
             onClick={toggleTheme}
             aria-label={
               theme === "dark"
-                ? "Switch to light theme"
-                : "Switch to dark theme"
+                ? t.shell.theme.toLightLabel
+                : t.shell.theme.toDarkLabel
             }
           >
             {theme === "dark" ? (
@@ -123,10 +135,12 @@ export default function AppShell() {
       </header>
 
       <main className={styles.main}>
-        {screen === "upload" && <Upload onAnalyze={onAnalyze} />}
+        {screen === "upload" && (
+          <Upload onAnalyze={onAnalyze} serverError={serverError} />
+        )}
         {screen === "loading" && <Loading onComplete={onComplete} />}
-        {screen === "dashboard" && (
-          <Dashboard report={report} density="normal" onReset={onReset} />
+        {screen === "dashboard" && analyze.data && (
+          <Dashboard report={analyze.data} density="normal" onReset={onReset} />
         )}
       </main>
     </div>

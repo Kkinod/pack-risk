@@ -2,13 +2,13 @@ export type Severity = "critical" | "high" | "medium" | "low";
 
 export type RiskLevel = "critical" | "high" | "medium" | "low" | "safe";
 
-export type DepType = "prod" | "dev" | "peer";
+export type DepType = "prod" | "dev" | "peer" | "optional";
 
 export interface CVE {
   id: string;
   summary: string;
   severity: Severity;
-  cvss: number;
+  cvss?: number;
   publishedAt: string;
 }
 

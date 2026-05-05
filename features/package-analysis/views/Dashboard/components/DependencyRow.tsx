@@ -3,7 +3,8 @@
 import { IconChevronRight, IconAlert } from "@/components/ui/icons";
 import type { Dependency, RiskLevel } from "../../../types";
 import { RiskTag } from "./RiskTag";
-import styles from "./DependencyRow.module.scss";
+import { t } from "@/locales";
+import styles from "../../Dashboard.module.scss";
 
 export function DependencyRow({
   dep,
@@ -63,8 +64,8 @@ export function DependencyRow({
             <div className={styles.cve}>
               <div className={styles.cveHeader}>
                 <h4 className={styles.cveTitle}>
-                  <IconAlert size={12} /> {dep.vulnerabilities.length} known
-                  vulnerabilities
+                  <IconAlert size={12} />{" "}
+                  {t.dashboard.depRow.knownVulns(dep.vulnerabilities.length)}
                 </h4>
               </div>
               <ul className={styles.cveList}>
@@ -73,9 +74,11 @@ export function DependencyRow({
                     <span className={styles.cveId}>{v.id}</span>
                     <span className={styles.cveSummary}>{v.summary}</span>
                     <span className={styles.cveMeta}>
-                      <span className={styles.cvss}>
-                        CVSS {v.cvss.toFixed(1)}
-                      </span>
+                      {v.cvss !== undefined && (
+                        <span className={styles.cvss}>
+                          CVSS {v.cvss.toFixed(1)}
+                        </span>
+                      )}
                       <RiskTag level={v.severity as RiskLevel} />
                     </span>
                   </li>
