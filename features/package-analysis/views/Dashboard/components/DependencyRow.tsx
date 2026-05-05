@@ -74,9 +74,11 @@ export function DependencyRow({
                     <span className={styles.cveId}>{v.id}</span>
                     <span className={styles.cveSummary}>{v.summary}</span>
                     <span className={styles.cveMeta}>
-                      <span className={styles.cvss}>
-                        CVSS {v.cvss.toFixed(1)}
-                      </span>
+                      {v.cvss !== undefined && (
+                        <span className={styles.cvss}>
+                          CVSS {v.cvss.toFixed(1)}
+                        </span>
+                      )}
                       <RiskTag level={v.severity as RiskLevel} />
                     </span>
                   </li>

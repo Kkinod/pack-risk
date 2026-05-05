@@ -5,7 +5,7 @@ export const en = {
   },
   shell: {
     brandName: "Dependency Risk Analyzer",
-    brandTag: "v0.1 · MVP",
+    brandTag: "v0.3 · MVP",
     nav: {
       progressLabel: "Progress",
       upload: "Upload",
@@ -37,6 +37,8 @@ export const en = {
       jsonFileOnly: "Please upload a .json file.",
       emptyContent: "Upload a file or paste package.json content first.",
       invalidJson: "Invalid JSON. Please check the file content.",
+      analysisFailed:
+        "Analysis failed. Please check your connection and try again.",
     },
   },
   loading: {
@@ -121,6 +123,15 @@ export const en = {
       verdict: "Safe — no known issues",
       desc: "No known vulnerabilities found in the dependency tree.",
     },
+  },
+  recommendations: {
+    safe: "No known vulnerabilities.",
+    noDescription: "No description available.",
+    upgradeTo: (version: string) => `Upgrade to ${version}.`,
+    critical: "Critical vulnerabilities detected.",
+    high: "High severity vulnerabilities found.",
+    medium: "Medium severity vulnerabilities found.",
+    low: "Low severity vulnerabilities found.",
   },
 };
 

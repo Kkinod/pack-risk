@@ -8,9 +8,10 @@ import styles from "./Upload.module.scss";
 
 interface UploadProps {
   onAnalyze: (input: { fileName: string; content: string }) => void;
+  serverError?: string;
 }
 
-export default function Upload({ onAnalyze }: UploadProps) {
+export default function Upload({ onAnalyze, serverError }: UploadProps) {
   const [fileName, setFileName] = useState<string>("");
   const [pasted, setPasted] = useState<string>("");
   const [dragOver, setDragOver] = useState(false);
@@ -158,7 +159,9 @@ export default function Upload({ onAnalyze }: UploadProps) {
             />
           </div>
 
-          {error && <div className={styles.errorMsg}>{error}</div>}
+          {(error || serverError) && (
+            <div className={styles.errorMsg}>{error || serverError}</div>
+          )}
         </div>
 
         <footer className={styles.footer}>
