@@ -1,21 +1,31 @@
-## Development Roadmap
+# Development Roadmap
 
-This section defines the recommended order of further development. It should be used as a roadmap both for manual work and Claude Code sessions.
+This document defines the recommended order of further development. It should be used as a roadmap for manual work.
 
-### 1. Clean up project status file
+## Completed Milestones
+
+The following milestones have already been completed:
+
+- Initial Next.js project setup
+- Initial project configuration with TypeScript, ESLint, Husky and SCSS Modules
+- MVP frontend flow with Upload, Analyze and Report views
+- Real OSV API integration for dependency vulnerability analysis
+- Backend analysis flow in `/api/analyze`
+
+## 1. Clean up project status file
 
 Goal: keep project documentation clear and up to date.
 
 Tasks:
 
 - Keep completed, missing, and current priority sections consistent
-- Update this file after every larger feature branch is completed
+- Update `docs/PROJECT_STATUS.md` after every larger feature branch is completed
 
-### 2. npm Registry API integration
+## 2. npm Registry API integration
 
 Goal: enrich dependency data with package metadata from the npm Registry.
 
-#### Step 1 — npm Registry client
+### Step 1 — npm Registry client
 
 Backend-only scope.
 
@@ -23,12 +33,13 @@ Tasks:
 
 - Add `features/package-analysis/server/clients/npm.ts`
 - Fetch latest package metadata from `https://registry.npmjs.org/{package}/latest`
+- Properly encode package names, including scoped packages such as `@scope/package`
 - Add `latestVersion` to dependency report data
 - Integrate npm Registry fetching into `POST /api/analyze`
 - Fetch npm metadata in parallel with OSV-related processing where possible
 - Handle missing packages, timeouts, network errors, and partial results
 
-#### Step 2 — display npm data in UI
+### Step 2 — display npm data in UI
 
 Tasks:
 
@@ -37,7 +48,7 @@ Tasks:
 - Display fallback state when `latestVersion` is missing, for example `Unknown`
 - Add required UI strings to `locales/en.ts`
 
-#### Step 3 — use latest version data in recommendations
+### Step 3 — use latest version data in recommendations
 
 Tasks:
 
@@ -46,11 +57,13 @@ Tasks:
 - Compare `latestVersion` with `fixedIn` when possible
 - Keep generic recommendation text only when no reliable version data is available
 
-```
+Recommended branch:
+
+```bash
 feat/npm-registry-integration
 ```
 
-### 3. Report improvements
+## 3. Report improvements
 
 Goal: make the report more useful based on real OSV and npm data, without adding AI yet.
 
@@ -65,11 +78,11 @@ Tasks:
 
 Recommended branch:
 
-```
+```bash
 feat/report-improvements
 ```
 
-### 4. Report export
+## 4. Report export
 
 Goal: allow users to export analysis results.
 
@@ -82,11 +95,11 @@ Tasks:
 
 Recommended branch:
 
-```
+```bash
 feat/report-export
 ```
 
-### 5. AI recommendations
+## 5. AI recommendations
 
 Goal: add AI-assisted explanation and recommendations after the report contains enough real data.
 
@@ -101,11 +114,11 @@ Tasks:
 
 Recommended branch:
 
-```
+```bash
 feat/ai-recommendations
 ```
 
-### 6. Final thesis MVP stabilization
+## 6. Final thesis MVP stabilization
 
 Goal: prepare the application for engineering thesis presentation.
 
@@ -120,7 +133,7 @@ Tasks:
 
 Recommended branch:
 
-```
+```bash
 chore/mvp-stabilization
 ```
 
