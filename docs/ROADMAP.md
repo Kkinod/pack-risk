@@ -27,17 +27,19 @@ Goal: enrich dependency data with package metadata from the npm Registry.
 
 ### Step 1 — npm Registry client
 
+Status: completed
+
 Backend-only scope.
 
 Tasks:
 
-- Add `features/package-analysis/server/clients/npm.ts`
-- Fetch latest package metadata from `https://registry.npmjs.org/{package}/latest`
-- Properly encode package names, including scoped packages such as `@scope/package`
-- Add `latestVersion` to dependency report data
-- Integrate npm Registry fetching into `POST /api/analyze`
-- Fetch npm metadata in parallel with OSV-related processing where possible
-- Handle missing packages, timeouts, network errors, and partial results
+- ✅ Add `features/package-analysis/server/clients/npm.ts`
+- ✅ Fetch latest package metadata from `https://registry.npmjs.org/{package}/latest`
+- ✅ Properly encode package names, including scoped packages such as `@scope/package`
+- ✅ Add `latestVersion` to dependency report data
+- ✅ Integrate npm Registry fetching into `POST /api/analyze`
+- ✅ Fetch npm metadata in parallel with OSV-related processing where possible
+- ✅ Handle missing packages, timeouts, network errors, and partial results
 
 ### Step 2 — display npm data in UI
 

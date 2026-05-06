@@ -90,7 +90,8 @@ Implemented:
 - ✅ `POST /api/analyze` — full analysis endpoint with error handling and concurrency control
 - ✅ `features/package-analysis/server/parseManifest.ts` — parses and validates `package.json`, extracts deps from `dependencies`, `devDependencies`, `peerDependencies`, `optionalDependencies`, strips semver range operators
 - ✅ `features/package-analysis/server/clients/osv.ts` — `POST /v1/querybatch` for all deps in one request, `GET /v1/vulns/{id}` for full vuln details, retry logic, timeout
-- ✅ `features/package-analysis/server/buildReport.ts` — severity classification (GHSA `database_specific.severity` first, CVSS vector heuristic as fallback), risk score calculation, recommendations
+- ✅ `features/package-analysis/server/clients/npm.ts` — npm Registry client; fetches `/{package}/latest`, handles scoped packages, 404 returns `null`, runs in parallel with OSV in `/api/analyze`
+- ✅ `features/package-analysis/server/buildReport.ts` — severity classification (GHSA `database_specific.severity` first, CVSS vector heuristic as fallback), risk score calculation, recommendations, `latestVersion` per dependency
 - ✅ `features/package-analysis/api/useAnalyze.ts` — React Query mutation hook calling real API
 - ✅ `AppShell.tsx` — calls real API, shows error on failure, no mock data fallback
 - ✅ `lib/http/client.ts` — shared HTTP client with retry and timeout
@@ -101,22 +102,17 @@ OSV API is the primary vulnerability source.
 
 ## Current Priority
 
-The Real Package Analysis MVP is complete. Next priorities:
+npm Registry integration (Step 1) is complete. Next priorities:
 
+- ❌ Latest available version column in dependency table (data available, UI missing)
+- ❌ Improved recommendations using `latestVersion` vs `fixedIn`
 - ❌ Export report (PDF or JSON)
-- ❌ Latest available version column in dependency table
 - ❌ AI recommendations section
 - ❌ Final report summary section
-- AI recommendations section
-- Final report summary section
 
 ## Not a Priority Right Now
 
 - Authentication
-- Analysis history
-- Additional charts
-- UI polishing beyond current state
-  ntication
 - Analysis history
 - Additional charts
 - UI polishing beyond current state
