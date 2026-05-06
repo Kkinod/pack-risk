@@ -77,8 +77,8 @@ public/                      # Static assets
 
 The project includes additional documentation in the `docs/` directory to describe the development process and implementation progress.
 
-- `docs/PROJECT_STATUS.md` - tracks the current state of the application, including completed features, missing functionality, and current priorities.
-- `docs/ROADMAP.md` - describes the planned development roadmap and recommended order of future implementation steps.
+- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — tracks the current state of the application, including completed features, missing functionality, and current priorities.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — describes the planned development roadmap and recommended order of future implementation steps.
 
 This documentation helps maintain a clear project scope and supports further development of the application.
 
