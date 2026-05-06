@@ -54,12 +54,14 @@ Tasks:
 
 ### Step 3 — use latest version data in recommendations
 
+Status: completed
+
 Tasks:
 
-- Improve recommendation text when `latestVersion` is available
-- Prefer specific recommendations such as `Update to X.Y.Z`
-- Compare `latestVersion` with `fixedIn` when possible
-- Keep generic recommendation text only when no reliable version data is available
+- ✅ Improve recommendation text when `latestVersion` is available
+- ✅ Prefer specific recommendations such as `Update to X.Y.Z`
+- ✅ Compare `latestVersion` with `fixedIn` when possible
+- ✅ Keep generic recommendation text only when no reliable version data is available
 
 Recommended branch:
 
@@ -69,16 +71,23 @@ feat/npm-registry-integration
 
 ## 3. Report improvements
 
-Goal: make the report more useful based on real OSV and npm data, without adding AI yet.
+Goal: turn the current dependency table into a more complete and user-friendly report based on real OSV and npm data, without adding AI yet.
+
+The dependency table already presents technical package-level data. This step should add higher-level report sections that help users quickly understand what is most important and what should be fixed first.
 
 Tasks:
 
-- Add "Most Important Issues" section
-- Add external vulnerability source links, such as OSV, NVD, and GHSA when available
-- Add simple impact description for vulnerable dependencies
-- Add final report summary generated algorithmically
+- Add "Most Important Issues" section above the dependency table
+- Highlight the highest-risk packages based on severity, vulnerability count, and recommended action
+- Add external vulnerability source links when available, such as:
+  - OSV advisory link
+  - GHSA advisory link
+  - NVD CVE link
+- Add simple algorithmic impact description for vulnerable dependencies
+- Add final report summary generated without AI
 - Add list of critical dependencies
-- Improve recommendation text using available vulnerability and version data
+- Add report-level recommendations based on the highest-risk dependencies
+- Keep the dependency table as the detailed technical part of the report
 
 Recommended branch:
 
@@ -153,3 +162,15 @@ Follow this order:
 6. MVP stabilization
 
 Do not start AI-related work before npm Registry integration and report improvements are completed.
+
+---
+
+## Future External API Integrations
+
+Potential future integrations:
+
+- GitHub Advisory Database for additional GHSA advisory details and source links
+- NVD API for additional CVE and CVSS metadata
+- Snyk API for additional vulnerability intelligence
+
+These integrations are not part of the current MVP scope.
