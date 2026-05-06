@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.6.0] - 2026-05-06
+
+### Added
+
+- `aliases`, `references`, `cveId`, `ghsaId`, and `impact` fields on `CVE` type
+- `VulnReference` type with `{ type, url }` shape
+- `criticalDependencies`, `topRecommendations`, and `summary` fields on `AnalysisReport`
+- `OsvVuln` extended with `aliases: string[]` and `references: OsvReference[]`
+- Algorithmic `impact` text per vulnerability based on severity and dependency type (runtime vs tooling)
+- `criticalDependencies` — vulnerable deps with `riskLevel === "critical"`, sorted by weighted severity score
+- `topRecommendations` — top 5 vulnerable deps by weight, production deps boosted ×1.2
+- `summary` — single-sentence report summary generated from vulnerability counts and risk score
+- i18n strings: `impact.*`, `topRecommendation.line`, `reportSummary.*` in `locales/en.ts`
+- 13 new unit tests for aliases, references, impact grouping, ranking, and summary generation
+
+### Removed
+
+- Unused `MOCK_REPORT` export from `mockData.ts`
+
 ## [0.5.1] - 2026-05-06
 
 ### Changed

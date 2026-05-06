@@ -258,4 +258,218 @@ describe("buildReport", () => {
     expect(report.vulnerableDependencies).toBe(1);
     expect(report.totalDependencies).toBe(2);
   });
+
+  it("extracts cveId and ghsaId from primary id and aliases", () => {
+    const vuln: OsvVuln = {
+      id: "GHSA-aaaa-bbbb-cccc",
+      summary: "alias test",
+      database_specific: { severity: "HIGH" },
+      aliases: ["CVE-2024-9999"],
+    };
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["GHSA-aaaa-bbbb-cccc"]],
+      vulnDetails: new Map([["GHSA-aaaa-bbbb-cccc", vuln]]),
+    });
+    const cve = report.dependencies[0].vulnerabilities[0];
+    expect(cve.ghsaId).toBe("GHSA-aaaa-bbbb-cccc");
+    expect(cve.cveId).toBe("CVE-2024-9999");
+    expect(cve.aliases).toEqual(["CVE-2024-9999"]);
+  });
+
+  it("falls back to undefined ids when no matching alias is present", () => {
+    const vuln: OsvVuln = {
+      id: "OSV-2024-1",
+      database_specific: { severity: "MEDIUM" },
+    };
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["OSV-2024-1"]],
+      vulnDetails: new Map([["OSV-2024-1", vuln]]),
+    });
+    const cve = report.dependencies[0].vulnerabilities[0];
+    expect(cve.cveId).toBeUndefined();
+    expect(cve.ghsaId).toBeUndefined();
+    expect(cve.aliases).toEqual([]);
+  });
+
+  it("normalizes references and keeps known types", () => {
+    const vuln: OsvVuln = {
+      id: "GHSA-REF",
+      database_specific: { severity: "HIGH" },
+      references: [
+        { type: "ADVISORY", url: "https://example.com/advisory" },
+        { type: "FIX", url: "https://example.com/fix" },
+        { type: "UNKNOWN", url: "https://example.com/other" },
+      ],
+    };
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["GHSA-REF"]],
+      vulnDetails: new Map([["GHSA-REF", vuln]]),
+    });
+    const refs = report.dependencies[0].vulnerabilities[0].references;
+    expect(refs).toHaveLength(3);
+    expect(refs.find((r) => r.type === "ADVISORY")?.url).toBe(
+      "https://example.com/advisory"
+    );
+    expect(refs.find((r) => r.url === "https://example.com/other")?.type).toBe(
+      "WEB"
+    );
+  });
+
+  it("filters out references with empty url", () => {
+    const vuln: OsvVuln = {
+      id: "GHSA-EMPTY",
+      database_specific: { severity: "LOW" },
+      references: [
+        { type: "WEB", url: "" },
+        { type: "WEB", url: "https://ok" },
+      ],
+    };
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["GHSA-EMPTY"]],
+      vulnDetails: new Map([["GHSA-EMPTY", vuln]]),
+    });
+    const refs = report.dependencies[0].vulnerabilities[0].references;
+    expect(refs).toHaveLength(1);
+    expect(refs[0].url).toBe("https://ok");
+  });
+
+  it("assigns runtime impact text for prod dependencies", () => {
+    const vuln = makeVuln("GHSA-IMP", "CRITICAL");
+    const report = buildReport({
+      ...baseParams,
+      extractedDeps: [{ name: "lodash", version: "1.0.0", type: "prod" }],
+      vulnsBatch: [["GHSA-IMP"]],
+      vulnDetails: new Map([["GHSA-IMP", vuln]]),
+    });
+    const impact = report.dependencies[0].vulnerabilities[0].impact;
+    expect(impact).toMatch(/running application/i);
+  });
+
+  it("assigns tooling impact text for dev dependencies", () => {
+    const vuln = makeVuln("GHSA-DEV", "CRITICAL");
+    const report = buildReport({
+      ...baseParams,
+      extractedDeps: [{ name: "vite", version: "1.0.0", type: "dev" }],
+      vulnsBatch: [["GHSA-DEV"]],
+      vulnDetails: new Map([["GHSA-DEV", vuln]]),
+    });
+    const impact = report.dependencies[0].vulnerabilities[0].impact;
+    expect(impact).toMatch(/development tooling|build pipeline/i);
+  });
+
+  it("returns critical dependencies sorted by weight", () => {
+    const critA = makeVuln("GHSA-A", "CRITICAL");
+    const critB = makeVuln("GHSA-B", "CRITICAL");
+    const high = makeVuln("GHSA-C", "HIGH");
+    const report = buildReport({
+      ...baseParams,
+      extractedDeps: [
+        { name: "one-crit", version: "1.0.0", type: "prod" },
+        { name: "two-crit", version: "1.0.0", type: "prod" },
+        { name: "high-only", version: "1.0.0", type: "prod" },
+      ],
+      vulnsBatch: [["GHSA-A"], ["GHSA-A", "GHSA-B"], ["GHSA-C"]],
+      vulnDetails: new Map([
+        ["GHSA-A", critA],
+        ["GHSA-B", critB],
+        ["GHSA-C", high],
+      ]),
+    });
+    expect(report.criticalDependencies.map((d) => d.name)).toEqual([
+      "two-crit",
+      "one-crit",
+    ]);
+  });
+
+  it("returns top recommendations limited to 5 vulnerable deps", () => {
+    const sevs = ["CRITICAL", "CRITICAL", "HIGH", "HIGH", "MEDIUM", "MEDIUM"];
+    const extractedDeps = sevs.map((_, i) => ({
+      name: `pkg-${i}`,
+      version: "1.0.0",
+      type: "prod" as const,
+    }));
+    const vulnsBatch = sevs.map((_, i) => [`V-${i}`]);
+    const vulnDetails = new Map(
+      sevs.map((sev, i) => [`V-${i}`, makeVuln(`V-${i}`, sev)])
+    );
+    const report = buildReport({
+      ...baseParams,
+      extractedDeps,
+      vulnsBatch,
+      vulnDetails,
+    });
+    expect(report.topRecommendations).toHaveLength(5);
+    expect(report.topRecommendations[0]).toContain("pkg-0");
+    expect(
+      report.topRecommendations.find((r) => r.includes("pkg-5"))
+    ).toBeUndefined();
+  });
+
+  it("ranks production deps higher than dev deps for tied severity", () => {
+    const vuln = makeVuln("GHSA-TIE", "HIGH");
+    const report = buildReport({
+      ...baseParams,
+      extractedDeps: [
+        { name: "dev-pkg", version: "1.0.0", type: "dev" },
+        { name: "prod-pkg", version: "1.0.0", type: "prod" },
+      ],
+      vulnsBatch: [["GHSA-TIE"], ["GHSA-TIE"]],
+      vulnDetails: new Map([["GHSA-TIE", vuln]]),
+    });
+    expect(report.topRecommendations[0]).toContain("prod-pkg");
+  });
+
+  it("excludes safe dependencies from top recommendations and critical list", () => {
+    const vuln = makeVuln("GHSA-S", "HIGH");
+    const report = buildReport({
+      ...baseParams,
+      extractedDeps: [
+        { name: "vuln-pkg", version: "1.0.0", type: "prod" },
+        { name: "safe-pkg", version: "1.0.0", type: "prod" },
+      ],
+      vulnsBatch: [["GHSA-S"], []],
+      vulnDetails: new Map([["GHSA-S", vuln]]),
+    });
+    expect(report.topRecommendations).toHaveLength(1);
+    expect(report.topRecommendations[0]).toContain("vuln-pkg");
+    expect(report.criticalDependencies).toHaveLength(0);
+  });
+
+  it("produces all-clean summary when no vulnerabilities are found", () => {
+    const report = buildReport({
+      ...baseParams,
+      extractedDeps: [
+        { name: "a", version: "1.0.0", type: "prod" },
+        { name: "b", version: "1.0.0", type: "prod" },
+      ],
+      vulnsBatch: [[], []],
+    });
+    expect(report.summary).toMatch(/clean|no known vulnerabilities/i);
+  });
+
+  it("produces high-risk summary when score is high", () => {
+    const vulns = Array.from({ length: 5 }, (_, i) =>
+      makeVuln(`G-${i}`, "CRITICAL")
+    );
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [vulns.map((v) => v.id)],
+      vulnDetails: new Map(vulns.map((v) => [v.id, v])),
+    });
+    expect(report.summary).toMatch(/immediate action/i);
+  });
+
+  it("produces low-risk summary when only low/medium issues exist", () => {
+    const vuln = makeVuln("G-LOW", "LOW");
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["G-LOW"]],
+      vulnDetails: new Map([["G-LOW", vuln]]),
+    });
+    expect(report.summary).toMatch(/low-impact|routine maintenance/i);
+  });
 });
