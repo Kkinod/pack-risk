@@ -102,9 +102,8 @@ OSV API is the primary vulnerability source.
 
 ## Current Priority
 
-npm Registry integration (Steps 1 and 2) is complete. Next priorities:
+npm Registry integration (Steps 1–3) is complete. Next priorities:
 
-- ❌ Improved recommendations using `latestVersion` vs `fixedIn`
 - ❌ Export report (PDF or JSON)
 - ❌ AI recommendations section
 - ❌ Final report summary section

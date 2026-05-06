@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.5.1] - 2026-05-06
+
+### Changed
+
+- Recommendation text now shows both `latestVersion` and `fixedIn` when the latest release is newer than the minimum fix: `"Update to X. Minimum fixed version is Y."`
+- When only one version is available, falls back to `"Upgrade to X."`
+- When `latestVersion` is older than `fixedIn` (fix not yet in latest), recommends `fixedIn` only
+
 ## [0.5.0] - 2026-05-06
 
 ### Added
