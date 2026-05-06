@@ -73,6 +73,15 @@ features/package-analysis/   # Main feature for package.json analysis
 public/                      # Static assets
 ```
 
+## Project Documentation
+
+The project includes additional documentation in the `docs/` directory to describe the development process and implementation progress.
+
+- `docs/PROJECT_STATUS.md` - tracks the current state of the application, including completed features, missing functionality, and current priorities.
+- `docs/ROADMAP.md` - describes the planned development roadmap and recommended order of future implementation steps.
+
+This documentation helps maintain a clear project scope and supports further development of the application.
+
 ## Development Guidelines
 
 The application is developed with a modular structure.
