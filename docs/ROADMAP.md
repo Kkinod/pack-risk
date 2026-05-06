@@ -75,19 +75,56 @@ Goal: turn the current dependency table into a more complete and user-friendly r
 
 The dependency table already presents technical package-level data. This step should add higher-level report sections that help users quickly understand what is most important and what should be fixed first.
 
+### Step 1 — Backend: extend report data with links and impact information
+
+Status: completed
+
 Tasks:
 
-- Add "Most Important Issues" section above the dependency table
-- Highlight the highest-risk packages based on severity, vulnerability count, and recommended action
-- Add external vulnerability source links when available, such as:
-  - OSV advisory link
-  - GHSA advisory link
-  - NVD CVE link
-- Add simple algorithmic impact description for vulnerable dependencies
-- Add final report summary generated without AI
-- Add list of critical dependencies
-- Add report-level recommendations based on the highest-risk dependencies
-- Keep the dependency table as the detailed technical part of the report
+- ✅ Extend `OsvVuln` with `aliases` and `references`
+- ✅ Add reference objects with `{ type, url }`
+- ✅ Extend vulnerability-related types in `types.ts` with:
+  - ✅ `aliases`
+  - ✅ `references`
+  - ✅ `cveId`
+  - ✅ `ghsaId`
+- ✅ Update `buildReport.ts` to map aliases and references from OSV vulnerability details
+- ✅ Add algorithmic `impact` text per vulnerability based on severity and dependency type
+- ✅ Extend `AnalysisReport` with:
+  - ✅ `criticalDependencies: Dependency[]`
+  - ✅ `topRecommendations: string[]`
+  - ✅ `summary: string`
+
+### Step 2 — UI: add "Most Important Issues" section above the dependency table
+
+Tasks:
+
+- Add `TopIssues` component
+- Rank issues by severity weight, vulnerability count, and production dependency priority
+- Add external vulnerability links when available:
+  - OSV: `https://osv.dev/vulnerability/{id}`
+  - GHSA: `https://github.com/advisories/{ghsa}`
+  - NVD: `https://nvd.nist.gov/vuln/detail/{cve}`
+- Add required UI strings to `locales/en.ts`
+
+### Step 3 — UI: add Final Report Summary section without AI
+
+Tasks:
+
+- Add `ReportSummary` component below the dependency table
+- Display algorithmic report summary from `report.summary`
+- Display critical dependencies from `report.criticalDependencies`
+- Display top recommendations from `report.topRecommendations`
+- Generate this section only from existing report data, without AI
+
+### Step 4 — UI: extend expanded dependency row
+
+Tasks:
+
+- Extend `DependencyRow` expanded content
+- Add advisory links for each vulnerability
+- Display impact text per vulnerability
+- Keep the expanded row focused on package-level technical details
 
 Recommended branch:
 

@@ -32,12 +32,19 @@ export interface OsvSeverity {
   score: string;
 }
 
+export interface OsvReference {
+  type: string;
+  url: string;
+}
+
 export interface OsvVuln {
   id: string;
   summary?: string;
   published?: string;
   severity?: OsvSeverity[];
   affected?: OsvAffected[];
+  aliases?: string[];
+  references?: OsvReference[];
   database_specific?: {
     severity?: string;
     cvss?: { score?: number; vectorString?: string };

@@ -4,12 +4,22 @@ export type RiskLevel = "critical" | "high" | "medium" | "low" | "safe";
 
 export type DepType = "prod" | "dev" | "peer" | "optional";
 
+export interface VulnReference {
+  type: string;
+  url: string;
+}
+
 export interface CVE {
   id: string;
   summary: string;
   severity: Severity;
   cvss?: number;
   publishedAt: string;
+  aliases: string[];
+  references: VulnReference[];
+  cveId?: string;
+  ghsaId?: string;
+  impact: string;
 }
 
 export interface Dependency {
@@ -40,6 +50,9 @@ export interface AnalysisReport {
   totalVulnerabilities: number;
   severityBreakdown: SeverityBreakdown;
   dependencies: Dependency[];
+  criticalDependencies: Dependency[];
+  topRecommendations: string[];
+  summary: string;
 }
 
 export type Screen = "upload" | "loading" | "dashboard";

@@ -1,13 +1,33 @@
 import type {
   AnalysisReport,
   CVE,
+  DepType,
   Dependency,
   RiskLevel,
   Severity,
+  VulnReference,
 } from "../types";
 import type { ExtractedDep } from "./parseManifest";
 import type { OsvVuln } from "./clients/osv";
 import { t } from "@/locales";
+
+const KNOWN_REFERENCE_TYPES = new Set([
+  "ADVISORY",
+  "FIX",
+  "REPORT",
+  "WEB",
+  "ARTICLE",
+  "PACKAGE",
+]);
+
+const TOP_RECOMMENDATIONS_LIMIT = 5;
+const PROD_WEIGHT_BOOST = 1.2;
+const SEVERITY_WEIGHTS: Record<Severity, number> = {
+  critical: 100,
+  high: 30,
+  medium: 8,
+  low: 1,
+};
 
 function classifySeverity(vuln: OsvVuln): Severity {
   const dbSev = vuln.database_specific?.severity;
@@ -61,6 +81,33 @@ function extractFixedIn(
     }
   }
   return undefined;
+}
+
+function findAlias(
+  primaryId: string,
+  aliases: string[],
+  prefix: string
+): string | undefined {
+  if (primaryId.startsWith(prefix)) return primaryId;
+  return aliases.find((a) => a.startsWith(prefix));
+}
+
+function extractReferences(vuln: OsvVuln): VulnReference[] {
+  const refs = vuln.references ?? [];
+  return refs
+    .filter((r) => r && typeof r.url === "string" && r.url.length > 0)
+    .map((r) => ({
+      type: KNOWN_REFERENCE_TYPES.has(r.type) ? r.type : "WEB",
+      url: r.url,
+    }));
+}
+
+function impactGroup(depType: DepType): "runtime" | "tooling" {
+  return depType === "dev" || depType === "optional" ? "tooling" : "runtime";
+}
+
+function buildImpact(severity: Severity, depType: DepType): string {
+  return t.impact[severity][impactGroup(depType)];
 }
 
 function calcRiskLevel(vulns: CVE[]): RiskLevel {
@@ -139,6 +186,35 @@ function calcRiskScore(deps: Dependency[]): number {
   return Math.min(100, score);
 }
 
+function depWeight(dep: Dependency): number {
+  let weight = 0;
+  for (const v of dep.vulnerabilities) {
+    weight += SEVERITY_WEIGHTS[v.severity];
+  }
+  if (dep.type === "prod") weight *= PROD_WEIGHT_BOOST;
+  return weight;
+}
+
+function rankDependencies(deps: Dependency[]): Dependency[] {
+  return [...deps]
+    .filter((d) => d.vulnerabilities.length > 0)
+    .sort((a, b) => depWeight(b) - depWeight(a));
+}
+
+function buildSummary(
+  total: number,
+  vulnerable: number,
+  riskScore: number,
+  breakdown: { critical: number; high: number }
+): string {
+  if (vulnerable === 0) return t.reportSummary.allClean(total);
+  if (riskScore >= 60)
+    return t.reportSummary.highRisk(total, vulnerable, breakdown.critical);
+  if (riskScore >= 30)
+    return t.reportSummary.midRisk(total, vulnerable, breakdown.high);
+  return t.reportSummary.lowRisk(total, vulnerable);
+}
+
 export function buildReport(params: {
   fileName: string;
   projectName: string;
@@ -163,12 +239,19 @@ export function buildReport(params: {
       .map((id): CVE | null => {
         const vuln = vulnDetails.get(id);
         if (!vuln) return null;
+        const severity = classifySeverity(vuln);
+        const aliases = vuln.aliases ?? [];
         return {
           id: vuln.id,
           summary: vuln.summary ?? t.recommendations.noDescription,
-          severity: classifySeverity(vuln),
+          severity,
           cvss: extractCvssScore(vuln),
           publishedAt: vuln.published ?? new Date().toISOString(),
+          aliases,
+          references: extractReferences(vuln),
+          cveId: findAlias(vuln.id, aliases, "CVE-"),
+          ghsaId: findAlias(vuln.id, aliases, "GHSA-"),
+          impact: buildImpact(severity, dep.type),
         };
       })
       .filter((v): v is CVE => v !== null);
@@ -212,15 +295,32 @@ export function buildReport(params: {
     }
   }
 
+  const ranked = rankDependencies(dependencies);
+  const criticalDependencies = ranked.filter((d) => d.riskLevel === "critical");
+  const topRecommendations = ranked
+    .slice(0, TOP_RECOMMENDATIONS_LIMIT)
+    .map((d) => t.topRecommendation.line(d.name, d.recommendation));
+
+  const riskScore = calcRiskScore(dependencies);
+  const summary = buildSummary(
+    dependencies.length,
+    vulnerableDependencies,
+    riskScore,
+    severityBreakdown
+  );
+
   return {
     fileName,
     projectName,
     analyzedAt: new Date().toISOString(),
-    riskScore: calcRiskScore(dependencies),
+    riskScore,
     totalDependencies: dependencies.length,
     vulnerableDependencies,
     totalVulnerabilities,
     severityBreakdown,
     dependencies,
+    criticalDependencies,
+    topRecommendations,
+    summary,
   };
 }

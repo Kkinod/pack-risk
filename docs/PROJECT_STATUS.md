@@ -69,17 +69,16 @@ Completed:
 - ✅ Search, sort, and filter in the dependency table
 - ✅ Expandable row with CVE details (ID, summary, CVSS, severity)
 - ✅ New analysis button
+- ✅ Latest available version column
 
 Missing:
 
 - ❌ Working export report action (button present, no handler)
-- ✅ Latest available version column
-- ❌ List of most important issues section
+- ❌ Most important issues section
 - ❌ AI recommendations section
-- ❌ Final report section (AI summary, top-5 recommendations, critical deps list)
-- ❌ External vulnerability source links (NVD, GHSA)
-- ❌ Impact description for the analyzed project
-- ❌ AI-generated recommendation per package
+- ❌ Final report summary section
+- ❌ External vulnerability source links in expanded row (NVD, GHSA, OSV)
+- ❌ Impact description per vulnerability in expanded row
 
 ## Backend / Analysis Logic Status
 
@@ -89,24 +88,25 @@ Implemented:
 
 - ✅ `POST /api/analyze` — full analysis endpoint with error handling and concurrency control
 - ✅ `features/package-analysis/server/parseManifest.ts` — parses and validates `package.json`, extracts deps from `dependencies`, `devDependencies`, `peerDependencies`, `optionalDependencies`, strips semver range operators
-- ✅ `features/package-analysis/server/clients/osv.ts` — `POST /v1/querybatch` for all deps in one request, `GET /v1/vulns/{id}` for full vuln details, retry logic, timeout
+- ✅ `features/package-analysis/server/clients/osv.ts` — `POST /v1/querybatch` for all deps in one request, `GET /v1/vulns/{id}` for full vuln details, retry logic, timeout; `OsvVuln` includes `aliases` and `references`
 - ✅ `features/package-analysis/server/clients/npm.ts` — npm Registry client; fetches `/{package}/latest`, handles scoped packages, 404 returns `null`, runs in parallel with OSV in `/api/analyze`
-- ✅ `features/package-analysis/server/buildReport.ts` — severity classification (GHSA `database_specific.severity` first, CVSS vector heuristic as fallback), risk score calculation, recommendations, `latestVersion` per dependency
+- ✅ `features/package-analysis/server/buildReport.ts` — severity classification, risk score, recommendations, `latestVersion`, `impact` text per vulnerability, `criticalDependencies`, `topRecommendations`, `summary`
 - ✅ `features/package-analysis/api/useAnalyze.ts` — React Query mutation hook calling real API
 - ✅ `AppShell.tsx` — calls real API, shows error on failure, no mock data fallback
 - ✅ `lib/http/client.ts` — shared HTTP client with retry and timeout
 - ✅ `lib/concurrency.ts` — pool utility for concurrent vuln detail fetching
-- ✅ `locales/en.ts` — i18n strings for all UI text
+- ✅ `locales/en.ts` — i18n strings for all UI text including impact and report summary templates
 
 OSV API is the primary vulnerability source.
 
 ## Current Priority
 
-npm Registry integration (Steps 1–3) is complete. Next priorities:
+Report improvements Step 1 (backend) is complete. Next priorities:
 
-- ❌ Export report (PDF or JSON)
-- ❌ AI recommendations section
-- ❌ Final report summary section
+- ❌ Step 2: Most important issues UI section
+- ❌ Step 3: Final report summary UI section
+- ❌ Step 4: Extended expanded dependency row with links and impact
+- ❌ Export report (JSON)
 
 ## Not a Priority Right Now
 
@@ -114,6 +114,7 @@ npm Registry integration (Steps 1–3) is complete. Next priorities:
 - Analysis history
 - Additional charts
 - UI polishing beyond current state
+- AI recommendations (after UI report sections are done)
 
 ## Development Rule
 

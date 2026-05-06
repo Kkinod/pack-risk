@@ -138,6 +138,46 @@ export const en = {
     medium: "Medium severity vulnerabilities found.",
     low: "Low severity vulnerabilities found.",
   },
+  impact: {
+    critical: {
+      runtime:
+        "Critical risk to the running application. Successful exploitation may lead to full system compromise, data exposure, or remote code execution.",
+      tooling:
+        "Critical issue in development tooling. Limited runtime exposure, but may affect build pipeline integrity or CI/CD security.",
+    },
+    high: {
+      runtime:
+        "High risk to the running application. May allow remote exploitation, privilege escalation, or sensitive data leakage.",
+      tooling:
+        "High risk in development tooling. Limited production exposure, but should be patched to keep the toolchain secure.",
+    },
+    medium: {
+      runtime:
+        "Moderate risk. Exploitation requires specific conditions, but the issue should be addressed in the next release.",
+      tooling:
+        "Moderate dev-only risk. Can wait for routine maintenance, but plan to upgrade.",
+    },
+    low: {
+      runtime:
+        "Low impact. Minor issue with limited exploitability under realistic conditions.",
+      tooling:
+        "Minimal impact. Cosmetic or low-severity issue in development tooling.",
+    },
+  },
+  topRecommendation: {
+    line: (name: string, recommendation: string) =>
+      `${name}: ${recommendation}`,
+  },
+  reportSummary: {
+    allClean: (total: number) =>
+      `All ${total} dependencies are clean. No known vulnerabilities found in the analyzed manifest.`,
+    lowRisk: (total: number, vulnerable: number) =>
+      `${total} dependencies analyzed, ${vulnerable} with known vulnerabilities. Mostly low-impact issues — keep dependencies fresh during routine maintenance.`,
+    midRisk: (total: number, vulnerable: number, high: number) =>
+      `${total} dependencies analyzed, ${vulnerable} vulnerable. ${high} high-severity issues should be addressed in the next release.`,
+    highRisk: (total: number, vulnerable: number, critical: number) =>
+      `${total} dependencies analyzed, ${vulnerable} vulnerable, including ${critical} critical issues. Immediate action recommended.`,
+  },
 };
 
 export type Locale = typeof en;
