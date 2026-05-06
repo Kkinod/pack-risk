@@ -26,6 +26,7 @@ The target users are mainly developers, but the application should also be under
 
 - Next.js
 - TypeScript
+- TanStack Query
 - SCSS Modules
 - pnpm
 - ESLint
