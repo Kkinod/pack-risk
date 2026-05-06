@@ -73,7 +73,7 @@ Completed:
 Missing:
 
 - ❌ Working export report action (button present, no handler)
-- ❌ Latest available version column (only current + fixedIn shown)
+- ✅ Latest available version column
 - ❌ List of most important issues section
 - ❌ AI recommendations section
 - ❌ Final report section (AI summary, top-5 recommendations, critical deps list)
@@ -102,9 +102,8 @@ OSV API is the primary vulnerability source.
 
 ## Current Priority
 
-npm Registry integration (Step 1) is complete. Next priorities:
+npm Registry integration (Steps 1 and 2) is complete. Next priorities:
 
-- ❌ Latest available version column in dependency table (data available, UI missing)
 - ❌ Improved recommendations using `latestVersion` vs `fixedIn`
 - ❌ Export report (PDF or JSON)
 - ❌ AI recommendations section

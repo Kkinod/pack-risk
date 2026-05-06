@@ -33,7 +33,7 @@ function classifySeverity(vuln: OsvVuln): Severity {
 
 function classifyFromCvssVector(vector: string): Severity {
   const get = (metric: string) =>
-    vector.match(new RegExp(`${metric}:([A-Z])`))?.at(1) ?? "N";
+    vector.match(new RegExp(`/${metric}:([A-Z])`))?.at(1) ?? "N";
 
   const highCount = ["C", "I", "A"].filter((m) => get(m) === "H").length;
   if (highCount === 3) return "critical";

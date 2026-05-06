@@ -47,6 +47,15 @@ export function DependencyRow({
           )}
         </td>
         <td>
+          {dep.latestVersion ? (
+            <span className={styles.latest}>{dep.latestVersion}</span>
+          ) : (
+            <span className={styles.latestUnknown}>
+              {t.dashboard.depRow.latestUnknown}
+            </span>
+          )}
+        </td>
+        <td>
           <span
             className={`${styles.vulnCount} ${hasVulns ? styles.vulnCountHas : styles.vulnCountZero}`}
           >
@@ -60,7 +69,7 @@ export function DependencyRow({
       </tr>
       {expanded && hasVulns && (
         <tr>
-          <td colSpan={5} className={styles.expandRowCell}>
+          <td colSpan={6} className={styles.expandRowCell}>
             <div className={styles.cve}>
               <div className={styles.cveHeader}>
                 <h4 className={styles.cveTitle}>

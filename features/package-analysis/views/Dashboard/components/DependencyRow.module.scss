@@ -53,6 +53,17 @@
   color: var(--accent);
 }
 
+.latest {
+  font-family: var(--font-mono, monospace);
+  color: var(--text);
+}
+
+.latestUnknown {
+  font-family: var(--font-mono, monospace);
+  color: var(--text-subtle);
+  font-style: italic;
+}
+
 .vulnCount {
   font-family: var(--font-mono, monospace);
   font-weight: 500;
