@@ -88,6 +88,7 @@ export const en = {
       cols: {
         package: "Package",
         version: "Version",
+        latest: "Latest",
         vulns: "Vulnerabilities",
         risk: "Risk",
         recommendation: "Recommendation",
@@ -95,6 +96,7 @@ export const en = {
     },
     depRow: {
       knownVulns: (n: number) => `${n} known vulnerabilities`,
+      latestUnknown: "Unknown",
     },
   },
   risk: {

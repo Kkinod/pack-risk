@@ -90,6 +90,7 @@ export function DependencyTable({
                 {t.dashboard.depTable.cols.version}{" "}
                 <span className={styles.sortArrow}>{sortArrow("version")}</span>
               </th>
+              <th>{t.dashboard.depTable.cols.latest}</th>
               <th
                 onClick={() => onSort("vulns")}
                 className={sortKey === "vulns" ? styles.sorted : ""}
@@ -110,7 +111,7 @@ export function DependencyTable({
           <tbody>
             {visible.length === 0 && (
               <tr>
-                <td colSpan={5} className={styles.empty}>
+                <td colSpan={6} className={styles.empty}>
                   {t.dashboard.depTable.empty}
                 </td>
               </tr>

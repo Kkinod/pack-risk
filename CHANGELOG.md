@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.5.0] - 2026-05-06
+
+### Added
+
+- `Latest` column in dependency table showing `latestVersion` from npm Registry or `Unknown` fallback
+- `cols.latest` and `depRow.latestUnknown` i18n strings in `locales/en.ts`
+- Unit tests for `parseManifest`, `buildReport`, `osv` client
+- Integration tests for `POST /api/analyze` in `tests/integration/`
+
+### Fixed
+
+- CVSS vector metric parsing in `buildReport` — regex now anchors on `/` separator to avoid matching partial metric names (e.g. `AC:L` no longer matched as `C:L`)
+
 ## [0.4.0] - 2026-05-06
 
 ### Added

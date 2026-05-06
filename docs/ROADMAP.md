@@ -43,12 +43,14 @@ Tasks:
 
 ### Step 2 — display npm data in UI
 
+Status: completed
+
 Tasks:
 
-- Add `Latest` column to the dependency table
-- Display `latestVersion` when available
-- Display fallback state when `latestVersion` is missing, for example `Unknown`
-- Add required UI strings to `locales/en.ts`
+- ✅ Add `Latest` column to the dependency table
+- ✅ Display `latestVersion` when available
+- ✅ Display fallback state when `latestVersion` is missing, for example `Unknown`
+- ✅ Add required UI strings to `locales/en.ts`
 
 ### Step 3 — use latest version data in recommendations
 
