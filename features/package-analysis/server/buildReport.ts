@@ -72,21 +72,47 @@ function calcRiskLevel(vulns: CVE[]): RiskLevel {
   return "low";
 }
 
+function isVersionAtLeast(a: string, b: string): boolean {
+  const parse = (v: string) => v.split(".").map(Number);
+  const [aMaj = 0, aMin = 0, aPatch = 0] = parse(a);
+  const [bMaj = 0, bMin = 0, bPatch = 0] = parse(b);
+  if (aMaj !== bMaj) return aMaj > bMaj;
+  if (aMin !== bMin) return aMin > bMin;
+  return aPatch >= bPatch;
+}
+
+function buildVersionSuffix(
+  fixedIn: string | undefined,
+  latestVersion: string | undefined
+): string {
+  if (
+    latestVersion &&
+    fixedIn &&
+    latestVersion !== fixedIn &&
+    isVersionAtLeast(latestVersion, fixedIn)
+  ) {
+    return ` ${t.recommendations.updateTo(latestVersion)} ${t.recommendations.minFixedVersion(fixedIn)}`;
+  }
+  const target = fixedIn ?? latestVersion;
+  return target ? ` ${t.recommendations.upgradeTo(target)}` : "";
+}
+
 function buildRecommendation(
   fixedIn: string | undefined,
-  riskLevel: RiskLevel
+  riskLevel: RiskLevel,
+  latestVersion?: string
 ): string {
   if (riskLevel === "safe") return t.recommendations.safe;
-  const fix = fixedIn ? ` ${t.recommendations.upgradeTo(fixedIn)}` : "";
+  const suffix = buildVersionSuffix(fixedIn, latestVersion);
   switch (riskLevel) {
     case "critical":
-      return `${t.recommendations.critical}${fix}`;
+      return `${t.recommendations.critical}${suffix}`;
     case "high":
-      return `${t.recommendations.high}${fix}`;
+      return `${t.recommendations.high}${suffix}`;
     case "medium":
-      return `${t.recommendations.medium}${fix}`;
+      return `${t.recommendations.medium}${suffix}`;
     case "low":
-      return `${t.recommendations.low}${fix}`;
+      return `${t.recommendations.low}${suffix}`;
   }
 }
 
@@ -165,7 +191,7 @@ export function buildReport(params: {
       type: dep.type,
       vulnerabilities,
       riskLevel,
-      recommendation: buildRecommendation(fixedIn, riskLevel),
+      recommendation: buildRecommendation(fixedIn, riskLevel, latestVersion),
       fixedIn,
       latestVersion,
     };

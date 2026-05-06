@@ -130,6 +130,9 @@ export const en = {
     safe: "No known vulnerabilities.",
     noDescription: "No description available.",
     upgradeTo: (version: string) => `Upgrade to ${version}.`,
+    updateTo: (version: string) => `Update to ${version}.`,
+    minFixedVersion: (version: string) =>
+      `Minimum fixed version is ${version}.`,
     critical: "Critical vulnerabilities detected.",
     high: "High severity vulnerabilities found.",
     medium: "Medium severity vulnerabilities found.",

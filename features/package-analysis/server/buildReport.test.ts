@@ -170,6 +170,80 @@ describe("buildReport", () => {
     });
   });
 
+  it("uses latestVersion in recommendation when fixedIn is absent", () => {
+    const vuln = makeVuln("GHSA-NOFIX", "HIGH");
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["GHSA-NOFIX"]],
+      vulnDetails: new Map([["GHSA-NOFIX", vuln]]),
+      npmLatestVersions: new Map([["lodash", "4.17.22"]]),
+    });
+    expect(report.dependencies[0].recommendation).toContain("4.17.22");
+  });
+
+  it("shows both latestVersion and fixedIn in recommendation when latestVersion is newer", () => {
+    const vuln: OsvVuln = {
+      id: "GHSA-BOTH",
+      database_specific: { severity: "HIGH" },
+      affected: [
+        {
+          package: { ecosystem: "npm", name: "lodash" },
+          ranges: [
+            {
+              type: "SEMVER",
+              events: [{ introduced: "0" }, { fixed: "4.17.20" }],
+            },
+          ],
+        },
+      ],
+    };
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["GHSA-BOTH"]],
+      vulnDetails: new Map([["GHSA-BOTH", vuln]]),
+      npmLatestVersions: new Map([["lodash", "4.17.22"]]),
+    });
+    const rec = report.dependencies[0].recommendation;
+    expect(rec).toContain("Update to 4.17.22.");
+    expect(rec).toContain("Minimum fixed version is 4.17.20.");
+  });
+
+  it("uses fixedIn when it is newer than latestVersion", () => {
+    const vuln: OsvVuln = {
+      id: "GHSA-FIXNEWER",
+      database_specific: { severity: "HIGH" },
+      affected: [
+        {
+          package: { ecosystem: "npm", name: "lodash" },
+          ranges: [
+            {
+              type: "SEMVER",
+              events: [{ introduced: "0" }, { fixed: "4.17.25" }],
+            },
+          ],
+        },
+      ],
+    };
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["GHSA-FIXNEWER"]],
+      vulnDetails: new Map([["GHSA-FIXNEWER", vuln]]),
+      npmLatestVersions: new Map([["lodash", "4.17.20"]]),
+    });
+    expect(report.dependencies[0].recommendation).toContain("4.17.25");
+    expect(report.dependencies[0].recommendation).not.toContain("4.17.20");
+  });
+
+  it("uses generic recommendation text when neither fixedIn nor latestVersion is available", () => {
+    const vuln = makeVuln("GHSA-NOVER", "HIGH");
+    const report = buildReport({
+      ...baseParams,
+      vulnsBatch: [["GHSA-NOVER"]],
+      vulnDetails: new Map([["GHSA-NOVER", vuln]]),
+    });
+    expect(report.dependencies[0].recommendation).not.toContain("Upgrade");
+  });
+
   it("counts vulnerable dependencies correctly", () => {
     const vuln = makeVuln("GHSA-X", "HIGH");
     const report = buildReport({
