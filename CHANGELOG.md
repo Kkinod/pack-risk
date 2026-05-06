@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.3.1] - 2026-05-06
+
+- Updating and publishing docs
+
 ## [0.3.0] - 2026-05-05
 
 ### Added
