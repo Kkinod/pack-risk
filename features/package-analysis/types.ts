@@ -20,6 +20,7 @@ export interface Dependency {
   riskLevel: RiskLevel;
   recommendation: string;
   fixedIn?: string;
+  latestVersion?: string;
 }
 
 export interface SeverityBreakdown {

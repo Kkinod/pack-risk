@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.4.0] - 2026-05-06
+
+### Added
+
+- `features/package-analysis/server/clients/npm.ts` — npm Registry client using shared `httpClient` factory; fetches `/{package}/latest`, handles scoped packages, returns `null` on 404
+- `latestVersion?: string` field on `Dependency` type
+- npm metadata fetching runs in parallel with `batchQueryOSV` in `/api/analyze`, capped at 8 concurrent requests
+- API response now includes `failedNpmCount` alongside existing `failedVulnCount`
+
+### Changed
+
+- `buildReport` accepts `npmLatestVersions: Map<string, string>` and populates `latestVersion` per dependency
+- `partialResults` flag in API response now also covers failed npm fetches
+
 ## [0.3.1] - 2026-05-06
 
 ### Added

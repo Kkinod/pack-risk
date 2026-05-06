@@ -119,9 +119,16 @@ export function buildReport(params: {
   extractedDeps: ExtractedDep[];
   vulnsBatch: string[][];
   vulnDetails: Map<string, OsvVuln>;
+  npmLatestVersions: Map<string, string>;
 }): AnalysisReport {
-  const { fileName, projectName, extractedDeps, vulnsBatch, vulnDetails } =
-    params;
+  const {
+    fileName,
+    projectName,
+    extractedDeps,
+    vulnsBatch,
+    vulnDetails,
+    npmLatestVersions,
+  } = params;
 
   const dependencies: Dependency[] = extractedDeps.map((dep, i) => {
     const vulnIds = vulnsBatch[i] ?? [];
@@ -150,6 +157,7 @@ export function buildReport(params: {
     }
 
     const riskLevel = calcRiskLevel(vulnerabilities);
+    const latestVersion = npmLatestVersions.get(dep.name);
 
     return {
       name: dep.name,
@@ -159,6 +167,7 @@ export function buildReport(params: {
       riskLevel,
       recommendation: buildRecommendation(fixedIn, riskLevel),
       fixedIn,
+      latestVersion,
     };
   });
 

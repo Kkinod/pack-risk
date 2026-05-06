@@ -5,12 +5,14 @@ import {
   fetchVulnDetails,
 } from "@/features/package-analysis/server/clients/osv";
 import type { OsvVuln } from "@/features/package-analysis/server/clients/osv";
+import { fetchLatestVersion } from "@/features/package-analysis/server/clients/npm";
 import { buildReport } from "@/features/package-analysis/server/buildReport";
 import { pool } from "@/lib/concurrency";
 import { HttpError } from "@/lib/http/errors";
 
 const MAX_CONTENT_BYTES = 1_000_000;
 const VULN_FETCH_CONCURRENCY = 8;
+const NPM_FETCH_CONCURRENCY = 8;
 
 export async function POST(request: Request) {
   let body: { fileName?: string; content?: string };
@@ -46,10 +48,25 @@ export async function POST(request: Request) {
     );
   }
 
+  const uniqueNames = [...new Set(manifest.deps.map((d) => d.name))];
+  const npmLatestVersions = new Map<string, string>();
+  const failedNpmFetches: string[] = [];
+
+  const npmPromise = pool(uniqueNames, NPM_FETCH_CONCURRENCY, async (name) => {
+    try {
+      const version = await fetchLatestVersion(name);
+      if (version) npmLatestVersions.set(name, version);
+    } catch (err) {
+      failedNpmFetches.push(name);
+      console.error(`[npm] fetchLatestVersion failed for ${name}:`, err);
+    }
+  });
+
   let vulnsBatch: string[][];
   try {
     vulnsBatch = await batchQueryOSV(manifest.deps);
   } catch (err) {
+    await npmPromise;
     return NextResponse.json(
       {
         error: "Vulnerability query failed",
@@ -72,17 +89,23 @@ export async function POST(request: Request) {
     }
   });
 
+  await npmPromise;
+
   const report = buildReport({
     fileName,
     projectName: manifest.name,
     extractedDeps: manifest.deps,
     vulnsBatch,
     vulnDetails,
+    npmLatestVersions,
   });
+
+  const partialResults = failedIds.length > 0 || failedNpmFetches.length > 0;
 
   return NextResponse.json({
     ...report,
-    partialResults: failedIds.length > 0,
+    partialResults,
     failedVulnCount: failedIds.length,
+    failedNpmCount: failedNpmFetches.length,
   });
 }
