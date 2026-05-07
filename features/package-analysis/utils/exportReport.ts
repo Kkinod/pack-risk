@@ -97,24 +97,32 @@ export function buildReportExport(report: AnalysisReport): ReportExport {
   };
 }
 
-function buildFileName(projectName: string): string {
+export type ExportExtension = "json" | "pdf";
+
+export function buildExportFileName(
+  projectName: string,
+  ext: ExportExtension
+): string {
   const date = new Date().toISOString().slice(0, 10);
   const slug = projectName.replace(/[^a-z0-9-_]/gi, "-").toLowerCase();
-  return slug
-    ? `pack-risk-${slug}-${date}.json`
-    : `pack-risk-report-${date}.json`;
+  const base = slug ? `pack-risk-${slug}` : "pack-risk-report";
+  return `${base}-${date}.${ext}`;
+}
+
+export function triggerBlobDownload(blob: Blob, fileName: string): void {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 export function downloadReportJson(report: AnalysisReport): void {
   const data = buildReportExport(report);
   const json = JSON.stringify(data, null, 2);
   const blob = new Blob([json], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = buildFileName(report.projectName);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  triggerBlobDownload(blob, buildExportFileName(report.projectName, "json"));
 }

@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.9.0] - 2026-05-07
+
+### Added
+
+- PDF export of the analysis report — generates an A4 PDF with header, risk score card, severity breakdown, summary, critical dependencies, top recommendations, full dependency table, and paginated footer
+- Export format selector (`JSON` / `PDF`) next to the export button — selected format is used when the button is clicked
+- `Exporting…` button label and disabled state while export is running; inline error message when export fails
+- `features/package-analysis/utils/ReportPdfDocument.tsx` — `@react-pdf/renderer` document component and `renderReportPdfBlob`
+- `features/package-analysis/utils/exportReportPdf.ts` — PDF entry point with lazy import of the document module so `@react-pdf/renderer` (~300 KB) is only loaded when PDF export is triggered
+- i18n strings: `dashboard.exportFormat.{label,json,pdf}`, `dashboard.exporting`, `dashboard.exportError` in `locales/en.ts`
+
+### Changed
+
+- `exportReport.ts` exposes shared `buildExportFileName(projectName, ext)` and `triggerBlobDownload(blob, fileName)` helpers reused by both JSON and PDF export paths
+
+### Dependencies
+
+- Added `@react-pdf/renderer ^4.5.1`
+
+## [0.8.0] - 2026-05-07
+
+### Added
+
+- JSON export of the analysis report — `Export report` button now triggers a browser download of the full report as a structured `.json` file
+- `features/package-analysis/utils/exportReport.ts` — export utility with `buildReportExport()` and `downloadReportJson()`
+- Explicit `ReportExport`, `ReportExportMeta`, `ReportExportDependency`, and `ReportExportVulnerability` types — decoupled from the internal `AnalysisReport` to keep the export schema stable across future report changes
+- Export filename uses a sluggified project name and ISO date: `pack-risk-{project}-YYYY-MM-DD.json` (falls back to `pack-risk-report-YYYY-MM-DD.json` when no project name is available)
+- Export metadata includes `exportedAt` separate from `analyzedAt`, plus risk score, severity breakdown, and dependency totals
+
 ## [0.7.0] - 2026-05-07
 
 ### Added

@@ -144,73 +144,73 @@ The first implementation should focus on JSON export. PDF export can be added la
 
 ### Step 1 — Prepare export data
 
-Status: pending
+Status: completed
 
 Tasks:
 
-- Create a report export data structure based on the current `AnalysisReport`
-- Include basic metadata:
-  - export date
-  - project/package name when available
-  - total dependencies
-  - vulnerable dependencies
-  - risk score
-  - severity breakdown
-- Include analyzed dependencies with:
-  - package name
-  - current version
-  - fixed version
-  - latest version
-  - vulnerability count
-  - risk level
-  - recommendation
-- Include vulnerability details:
-  - vulnerability ID
-  - CVE ID when available
-  - GHSA ID when available
-  - severity
-  - summary
-  - impact
-  - source links
-- Include report-level data:
-  - summary
-  - critical dependencies
-  - top recommendations
+- ✅ Create a report export data structure based on the current `AnalysisReport`
+- ✅ Include basic metadata:
+  - ✅ export date
+  - ✅ project/package name when available
+  - ✅ total dependencies
+  - ✅ vulnerable dependencies
+  - ✅ risk score
+  - ✅ severity breakdown
+- ✅ Include analyzed dependencies with:
+  - ✅ package name
+  - ✅ current version
+  - ✅ fixed version
+  - ✅ latest version
+  - ✅ vulnerability count
+  - ✅ risk level
+  - ✅ recommendation
+- ✅ Include vulnerability details:
+  - ✅ vulnerability ID
+  - ✅ CVE ID when available
+  - ✅ GHSA ID when available
+  - ✅ severity
+  - ✅ summary
+  - ✅ impact
+  - ✅ source links
+- ✅ Include report-level data:
+  - ✅ summary
+  - ✅ critical dependencies
+  - ✅ top recommendations
 
 ### Step 2 — Implement JSON export
 
-Status: pending
+Status: completed
 
 Tasks:
 
-- Add export handler for the existing `Export report` button
-- Generate a `.json` file from the current report data
-- Use a readable file name, for example `pack-risk-report-YYYY-MM-DD.json`
-- Trigger browser download on click
-- Keep export logic separated from UI components, for example in a utility function
+- ✅ Add export handler for the existing `Export report` button
+- ✅ Generate a `.json` file from the current report data
+- ✅ Use a readable file name, for example `pack-risk-report-YYYY-MM-DD.json`
+- ✅ Trigger browser download on click
+- ✅ Keep export logic separated from UI components, for example in a utility function
 
 ### Step 3 — Add UI feedback
 
-Status: pending
+Status: completed
 
 Tasks:
 
-- Add export format selection to the report UI
-- Support `JSON` and `PDF` as export options
-- Use the selected format when the export button is clicked
-- Keep JSON export based on the existing implementation
-- Add required UI strings to `locales/en.ts`
+- ✅ Add export format selection to the report UI
+- ✅ Support `JSON` and `PDF` as export options
+- ✅ Use the selected format when the export button is clicked
+- ✅ Keep JSON export based on the existing implementation
+- ✅ Add required UI strings to `locales/en.ts`
 
 ### Step 4 — Implement PDF export
 
-Status: pending
+Status: completed
 
 Tasks:
 
-- Generate a readable PDF report from the existing export data structure
-- Include risk score, dependency summary, severity breakdown, most important issues, critical dependencies, top recommendations, and dependency table summary
-- Use a readable file name, for example `pack-risk-report-YYYY-MM-DD.pdf`
-- Keep PDF generation logic separated from UI components
+- ✅ Generate a readable PDF report from the existing export data structure
+- ✅ Include risk score, dependency summary, severity breakdown, most important issues, critical dependencies, top recommendations, and dependency table summary
+- ✅ Use a readable file name, for example `pack-risk-report-YYYY-MM-DD.pdf`
+- ✅ Keep PDF generation logic separated from UI components
 
 Recommended branch:
 
