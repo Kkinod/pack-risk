@@ -7,6 +7,8 @@ import { useDependencyTable } from "./Dashboard/hooks/useDependencyTable";
 import { RiskGauge } from "./Dashboard/components/RiskGauge";
 import { SeverityPill } from "./Dashboard/components/SeverityPill";
 import { DependencyTable } from "./Dashboard/components/DependencyTable";
+import { TopIssues } from "./Dashboard/components/TopIssues";
+import { ReportSummary } from "./Dashboard/components/ReportSummary";
 import { t } from "@/locales";
 import styles from "./Dashboard.module.scss";
 
@@ -135,7 +137,9 @@ export default function Dashboard({
         </div>
       </div>
 
+      <TopIssues dependencies={report.criticalDependencies} />
       <DependencyTable {...table} />
+      <ReportSummary report={report} />
     </section>
   );
 }

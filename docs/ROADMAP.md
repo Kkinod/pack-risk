@@ -97,34 +97,38 @@ Tasks:
 
 ### Step 2 — UI: add "Most Important Issues" section above the dependency table
 
+Status: completed
+
 Tasks:
 
-- Add `TopIssues` component
-- Rank issues by severity weight, vulnerability count, and production dependency priority
-- Add external vulnerability links when available:
-  - OSV: `https://osv.dev/vulnerability/{id}`
-  - GHSA: `https://github.com/advisories/{ghsa}`
-  - NVD: `https://nvd.nist.gov/vuln/detail/{cve}`
-- Add required UI strings to `locales/en.ts`
+- ✅ Add `TopIssues` component
+- ✅ Rank issues by severity weight, vulnerability count, and production dependency priority
+- ✅ Show package name, priority label, short reason, and recommended action per item
+- ✅ Section renders only when critical dependencies are present
+- ✅ Add required UI strings to `locales/en.ts`
 
 ### Step 3 — UI: add Final Report Summary section without AI
 
+Status: completed
+
 Tasks:
 
-- Add `ReportSummary` component below the dependency table
-- Display algorithmic report summary from `report.summary`
-- Display critical dependencies from `report.criticalDependencies`
-- Display top recommendations from `report.topRecommendations`
-- Generate this section only from existing report data, without AI
+- ✅ Add `ReportSummary` component below the dependency table
+- ✅ Display algorithmic report summary from `report.summary`
+- ✅ Display critical dependencies from `report.criticalDependencies`
+- ✅ Display top recommendations from `report.topRecommendations`
+- ✅ Generate this section only from existing report data, without AI
 
 ### Step 4 — UI: extend expanded dependency row
 
+Status: completed
+
 Tasks:
 
-- Extend `DependencyRow` expanded content
-- Add advisory links for each vulnerability
-- Display impact text per vulnerability
-- Keep the expanded row focused on package-level technical details
+- ✅ Extend `DependencyRow` expanded content
+- ✅ Add advisory links for each vulnerability (OSV always, GHSA and NVD when available)
+- ✅ Display impact text per vulnerability
+- ✅ Keep the expanded row focused on package-level technical details
 
 Recommended branch:
 

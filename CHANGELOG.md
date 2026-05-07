@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.7.0] - 2026-05-07
+
+### Added
+
+- `TopIssues` component above the dependency table — priority summary of critical packages with risk badge, reason (dep type + dominant severity count), and recommended action; hidden when no critical dependencies exist
+- `ReportSummary` component below the dependency table — displays algorithmic `report.summary` text, critical dependencies list with risk tags, and top recommendations as a numbered list
+- Advisory links in expanded dependency row — OSV link per vulnerability (always present), GHSA and NVD links when `ghsaId` / `cveId` are available
+- Impact text per vulnerability in expanded dependency row
+- i18n strings for `topIssues.*` and `dashboard.summarySection.*` in `locales/en.ts`
+- `dashboard.depRow.links` i18n strings for OSV, GHSA, NVD labels
+
 ## [0.6.0] - 2026-05-06
 
 ### Added
