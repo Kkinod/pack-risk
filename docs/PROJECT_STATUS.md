@@ -70,15 +70,15 @@ Completed:
 - ✅ Expandable row with CVE details (ID, summary, CVSS, severity)
 - ✅ New analysis button
 - ✅ Latest available version column
+- ✅ Most important issues section (`TopIssues` — priority summary above the table)
+- ✅ Final report summary section (`ReportSummary` — algorithmic summary, critical deps, top recommendations)
+- ✅ External vulnerability source links in expanded row (OSV always, GHSA and NVD when available)
+- ✅ Impact description per vulnerability in expanded row
 
 Missing:
 
 - ❌ Working export report action (button present, no handler)
-- ❌ Most important issues section
 - ❌ AI recommendations section
-- ❌ Final report summary section
-- ❌ External vulnerability source links in expanded row (NVD, GHSA, OSV)
-- ❌ Impact description per vulnerability in expanded row
 
 ## Backend / Analysis Logic Status
 
@@ -101,12 +101,10 @@ OSV API is the primary vulnerability source.
 
 ## Current Priority
 
-Report improvements Step 1 (backend) is complete. Next priorities:
+Report improvements (Steps 2–4) are complete. Next priorities:
 
-- ❌ Step 2: Most important issues UI section
-- ❌ Step 3: Final report summary UI section
-- ❌ Step 4: Extended expanded dependency row with links and impact
 - ❌ Export report (JSON)
+- ❌ AI recommendations section
 
 ## Not a Priority Right Now
 

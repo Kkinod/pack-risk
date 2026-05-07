@@ -1,0 +1,119 @@
+.section {
+  background: var(--bg-elev-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px 24px;
+}
+
+.title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin: 0 0 16px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  background: var(--bg-elev-2);
+  border-left: 3px solid transparent;
+
+  &[data-risk="critical"] {
+    border-left-color: var(--risk-critical);
+  }
+  &[data-risk="high"] {
+    border-left-color: var(--risk-high);
+  }
+  &[data-risk="medium"] {
+    border-left-color: var(--risk-medium);
+  }
+  &[data-risk="low"] {
+    border-left-color: var(--risk-low);
+  }
+}
+
+.headRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.depName {
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.priorityBadge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: var(--r-sm);
+  margin-left: auto;
+
+  &[data-risk="critical"] {
+    background: var(--risk-critical-soft);
+    color: var(--risk-critical);
+  }
+  &[data-risk="high"] {
+    background: var(--risk-high-soft);
+    color: var(--risk-high);
+  }
+  &[data-risk="medium"] {
+    background: var(--risk-medium-soft);
+    color: var(--risk-medium);
+  }
+  &[data-risk="low"] {
+    background: var(--risk-low-soft);
+    color: var(--risk-low);
+  }
+}
+
+.reason {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.action {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.helper {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: var(--text-subtle);
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 16px;
+  }
+  .item {
+    padding: 12px;
+  }
+  .priorityBadge {
+    margin-left: 0;
+  }
+}

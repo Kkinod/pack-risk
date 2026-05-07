@@ -80,16 +80,51 @@ export function DependencyRow({
               <ul className={styles.cveList}>
                 {dep.vulnerabilities.map((v) => (
                   <li key={v.id} className={styles.cveItem}>
-                    <span className={styles.cveId}>{v.id}</span>
-                    <span className={styles.cveSummary}>{v.summary}</span>
-                    <span className={styles.cveMeta}>
-                      {v.cvss !== undefined && (
-                        <span className={styles.cvss}>
-                          CVSS {v.cvss.toFixed(1)}
-                        </span>
-                      )}
-                      <RiskTag level={v.severity as RiskLevel} />
-                    </span>
+                    <div className={styles.cveItemHeader}>
+                      <span className={styles.cveId}>{v.id}</span>
+                      <span className={styles.cveMeta}>
+                        {v.cvss !== undefined && (
+                          <span className={styles.cvss}>
+                            CVSS {v.cvss.toFixed(1)}
+                          </span>
+                        )}
+                        <RiskTag level={v.severity as RiskLevel} />
+                      </span>
+                      <div className={styles.cveLinks}>
+                        <a
+                          href={`https://osv.dev/vulnerability/${v.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.cveLink}
+                        >
+                          {t.dashboard.depRow.links.osv}
+                        </a>
+                        {v.ghsaId && (
+                          <a
+                            href={`https://github.com/advisories/${v.ghsaId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.cveLink}
+                          >
+                            {t.dashboard.depRow.links.ghsa}
+                          </a>
+                        )}
+                        {v.cveId && (
+                          <a
+                            href={`https://nvd.nist.gov/vuln/detail/${v.cveId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.cveLink}
+                          >
+                            {t.dashboard.depRow.links.nvd}
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    {v.summary && (
+                      <p className={styles.cveSummary}>{v.summary}</p>
+                    )}
+                    {v.impact && <p className={styles.cveImpact}>{v.impact}</p>}
                   </li>
                 ))}
               </ul>

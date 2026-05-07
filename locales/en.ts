@@ -97,6 +97,16 @@ export const en = {
     depRow: {
       knownVulns: (n: number) => `${n} known vulnerabilities`,
       latestUnknown: "Unknown",
+      links: {
+        osv: "OSV",
+        ghsa: "GHSA",
+        nvd: "NVD",
+      },
+    },
+    summarySection: {
+      title: "Report Summary",
+      criticalDepsLabel: "Critical Dependencies",
+      topRecsLabel: "Top Recommendations",
     },
   },
   risk: {
@@ -163,6 +173,27 @@ export const en = {
       tooling:
         "Minimal impact. Cosmetic or low-severity issue in development tooling.",
     },
+  },
+  topIssues: {
+    title: "Most Important Issues",
+    helper:
+      "Full technical details are available in the dependency table below.",
+    priority: {
+      critical: "Fix first",
+      high: "High-priority update",
+      medium: "Schedule update",
+      low: "Routine update",
+    },
+    depType: {
+      prod: "Production",
+      dev: "Dev",
+      peer: "Peer",
+      optional: "Optional",
+    },
+    reason: (depType: string, count: number, severity: string) =>
+      `${depType} dependency with ${count} ${severity} ${
+        count === 1 ? "vulnerability" : "vulnerabilities"
+      }`,
   },
   topRecommendation: {
     line: (name: string, recommendation: string) =>
