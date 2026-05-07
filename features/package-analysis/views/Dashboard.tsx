@@ -2,6 +2,7 @@
 
 import { IconShield, IconDownload, IconRefresh } from "@/components/ui/icons";
 import { scoreToMeta } from "../utils/risk";
+import { downloadReportJson } from "../utils/exportReport";
 import type { AnalysisReport } from "../types";
 import { useDependencyTable } from "./Dashboard/hooks/useDependencyTable";
 import { RiskGauge } from "./Dashboard/components/RiskGauge";
@@ -40,7 +41,7 @@ export default function Dashboard({
           </div>
         </div>
         <div className={styles.actions}>
-          <button className="btn">
+          <button className="btn" onClick={() => downloadReportJson(report)}>
             <IconDownload size={14} />
             {t.dashboard.exportReport}
           </button>
