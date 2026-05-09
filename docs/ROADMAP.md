@@ -273,10 +273,29 @@ Do not start AI-related work before npm Registry integration and report improvem
 
 ## Future External API Integrations
 
+These integrations are not part of the current engineering thesis MVP scope. They should be considered after the core MVP is completed and stabilized.
+
+Current data sources and references:
+
+- OSV API is used as the primary vulnerability data source
+- npm Registry API is used for package metadata and latest version information
+- OSV, GHSA, and NVD links are used as external references for vulnerability verification
+
+Future integrations should focus on data enrichment, not on replacing the current OSV-based analysis flow.
+
 Potential future integrations:
 
-- GitHub Advisory Database for additional GHSA advisory details and source links
-- NVD API for additional CVE and CVSS metadata
-- Snyk API for additional vulnerability intelligence
+- GitHub Advisory Database API for additional GHSA advisory metadata, affected version ranges, patched versions, publication dates, and source references
+- NVD API for additional CVE metadata, CVSS details, CWE classification, publication dates, modification dates, and official vulnerability descriptions
+- Snyk API for additional vulnerability intelligence, if API access and licensing conditions make it practical
 
-These integrations are not part of the current MVP scope.
+Planned enrichment approach:
+
+- Keep OSV API as the primary vulnerability detection source
+- Use additional APIs only to enrich already detected vulnerabilities
+- Match enriched data by CVE ID, GHSA ID, or OSV aliases
+- Display enriched data inside expanded vulnerability details
+- Keep one unified risk score instead of separate scores per external source
+- Clearly show which data source provided each piece of additional information
+
+These integrations may be considered for future development, for example as part of a master's thesis extension.
