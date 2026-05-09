@@ -1,6 +1,6 @@
 "use client";
 
-import { IconShield, IconDownload, IconRefresh } from "@/components/ui/icons";
+import { IconShield, IconRefresh } from "@/components/ui/icons";
 import { scoreToMeta } from "../utils/risk";
 import type { AnalysisReport } from "../types";
 import { useDependencyTable } from "./Dashboard/hooks/useDependencyTable";
@@ -9,6 +9,7 @@ import { SeverityPill } from "./Dashboard/components/SeverityPill";
 import { DependencyTable } from "./Dashboard/components/DependencyTable";
 import { TopIssues } from "./Dashboard/components/TopIssues";
 import { ReportSummary } from "./Dashboard/components/ReportSummary";
+import { ExportControl } from "./Dashboard/components/ExportControl";
 import { t } from "@/locales";
 import styles from "./Dashboard.module.scss";
 
@@ -40,10 +41,7 @@ export default function Dashboard({
           </div>
         </div>
         <div className={styles.actions}>
-          <button className="btn">
-            <IconDownload size={14} />
-            {t.dashboard.exportReport}
-          </button>
+          <ExportControl report={report} />
           <button className="btn" onClick={onReset}>
             <IconRefresh size={14} />
             {t.dashboard.newAnalysis}

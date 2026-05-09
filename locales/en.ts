@@ -63,6 +63,13 @@ export const en = {
     title: "Security report",
     projectLabel: "project",
     exportReport: "Export report",
+    exporting: "Exporting…",
+    exportFormat: {
+      label: "Export format",
+      json: "JSON",
+      pdf: "PDF",
+    },
+    exportError: "Export failed. Please try again.",
     newAnalysis: "New analysis",
     panels: {
       riskScore: "Overall risk score",
@@ -194,6 +201,43 @@ export const en = {
       `${depType} dependency with ${count} ${severity} ${
         count === 1 ? "vulnerability" : "vulnerabilities"
       }`,
+  },
+  pdf: {
+    docTitle: (name: string) => `Pack Risk Report — ${name}`,
+    eyebrow: "Pack Risk Report",
+    sourceLabel: (fileName: string) => `Source: ${fileName}`,
+    datesLine: (analyzed: string, exported: string) =>
+      `Analyzed: ${analyzed} · Exported: ${exported}`,
+    scoreOf100: (score: number) => `${score}/100`,
+    scoreLabel: {
+      critical: "Critical risk",
+      high: "High risk",
+      medium: "Medium risk",
+      low: "Low risk",
+      safe: "Safe",
+    },
+    stats: {
+      dependencies: "dependencies",
+      vulnerable: "vulnerable",
+      vulnerabilities: "vulnerabilities",
+    },
+    sections: {
+      summary: "Summary",
+      criticalDeps: "Critical dependencies",
+      topRecs: "Top recommendations",
+      depTable: "Dependencies",
+    },
+    tableHeaders: {
+      package: "Package",
+      version: "Version",
+      latest: "Latest",
+      vulns: "Vulns",
+      risk: "Risk",
+    },
+    vulnCount: (n: number) => `${n} ${n === 1 ? "vuln" : "vulns"}`,
+    footerBrand: (name: string) => `Pack Risk · ${name}`,
+    footerPage: (current: number, total: number) =>
+      `Page ${current} / ${total}`,
   },
   topRecommendation: {
     line: (name: string, recommendation: string) =>

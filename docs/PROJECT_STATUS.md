@@ -74,10 +74,12 @@ Completed:
 - ✅ Final report summary section (`ReportSummary` — algorithmic summary, critical deps, top recommendations)
 - ✅ External vulnerability source links in expanded row (OSV always, GHSA and NVD when available)
 - ✅ Impact description per vulnerability in expanded row
+- ✅ JSON export of the analysis report (`Export report` button triggers download of `pack-risk-{project}-YYYY-MM-DD.json`)
+- ✅ Export format selector (JSON / PDF) with disabled-while-exporting state and error feedback
+- ✅ PDF export of the analysis report (header, risk score card, summary, critical dependencies, top recommendations, full dependency table, paginated footer)
 
 Missing:
 
-- ❌ Working export report action (button present, no handler)
 - ❌ AI recommendations section
 
 ## Backend / Analysis Logic Status
@@ -96,15 +98,18 @@ Implemented:
 - ✅ `lib/http/client.ts` — shared HTTP client with retry and timeout
 - ✅ `lib/concurrency.ts` — pool utility for concurrent vuln detail fetching
 - ✅ `locales/en.ts` — i18n strings for all UI text including impact and report summary templates
+- ✅ `features/package-analysis/utils/exportReport.ts` — JSON export utility with explicit `ReportExport` schema, decoupled from `AnalysisReport`; exposes shared `buildExportFileName` and `triggerBlobDownload` helpers
+- ✅ `features/package-analysis/utils/ReportPdfDocument.tsx` — `@react-pdf/renderer` document component + `renderReportPdfBlob`
+- ✅ `features/package-analysis/utils/exportReportPdf.ts` — PDF entry point; lazy-imports `ReportPdfDocument` so `@react-pdf/renderer` is only loaded when PDF export is triggered
 
 OSV API is the primary vulnerability source.
 
 ## Current Priority
 
-Report improvements (Steps 2–4) are complete. Next priorities:
+Report export is complete (JSON + PDF, format selector in UI). Next priorities:
 
-- ❌ Export report (JSON)
 - ❌ AI recommendations section
+- ❌ MVP stabilization (error handling, edge cases, README/changelog polish for thesis)
 
 ## Not a Priority Right Now
 
