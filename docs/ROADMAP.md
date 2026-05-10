@@ -218,23 +218,76 @@ Recommended branch:
 feat/report-export
 ```
 
-## 5. AI recommendations
+## 5. AI security assessment and recommendations
 
-Goal: add AI-assisted explanation and recommendations after the report contains enough real data.
+Goal: add an AI-assisted security assessment based on the completed technical analysis report.
+
+The AI module should not replace OSV-based vulnerability detection, npm Registry metadata, or the algorithmic risk score. Its purpose is to transform the existing technical report into a clearer security assessment and actionable recommendations.
+
+The AI security assessment should include:
+
+- General assessment of the project's security situation
+- Simple-language explanation of the risk level
+- Repair priorities based on detected vulnerabilities, severity, dependency type, and available safe versions
+- Explanation of why selected packages are considered the most important
+- Recommendations for selected dependencies when useful
+
+### Step 1 — Prepare AI input data
+
+Status: planned
 
 Tasks:
 
-- Add AI recommendations section
-- Generate simple-language vulnerability explanations
-- Generate top recommendations for the whole project
-- Generate per-package recommendation when useful
-- Add "Generating AI-based report" step to Analyze view
-- Keep AI output grounded in OSV and npm data
+- Define the AI report data structure
+- Build AI input from the existing `AnalysisReport`
+- Include risk score, severity breakdown, critical dependencies, top recommendations, package versions, fixed versions, latest versions, and vulnerability summaries
+- Keep AI input limited to already verified OSV and npm Registry data
+- Exclude unnecessary raw data from the AI prompt
+
+### Step 2 — Backend AI security assessment generation
+
+Status: planned
+
+Tasks:
+
+- Add server-side AI assessment generation module
+- Generate a project-level security assessment
+- Generate simple-language risk explanation
+- Generate repair priorities
+- Generate reasoning for why selected packages should be fixed first
+- Generate recommendations for selected dependencies
+- Add fallback behavior when AI generation fails
+- Keep the technical report available even if AI generation fails
+
+### Step 3 — UI: add AI Security Assessment section
+
+Status: planned
+
+Tasks:
+
+- Add `AI Security Assessment` section to the report view
+- Display general project assessment
+- Display simple-language risk explanation
+- Display prioritized repair actions
+- Display explanations for selected high-priority packages
+- Display dependency-level AI recommendations when useful
+- Add loading and error states
+- Add required UI strings to `locales/en.ts`
+
+### Step 4 — Analyze View update
+
+Status: planned
+
+Tasks:
+
+- Add `Generating AI-based security assessment` step to the Analyze view
+- Clearly separate technical analysis from AI-assisted assessment
+- Show the normal technical report even if AI generation fails
 
 Recommended branch:
 
 ```bash
-feat/ai-recommendations
+feat/ai-security-assessment
 ```
 
 ## 6. Final thesis MVP stabilization
@@ -264,7 +317,7 @@ Follow this order:
 2. npm Registry API integration
 3. Report improvements
 4. Report export
-5. AI recommendations
+5. AI security assessment and recommendations
 6. MVP stabilization
 
 Do not start AI-related work before npm Registry integration and report improvements are completed.
@@ -299,3 +352,16 @@ Planned enrichment approach:
 - Clearly show which data source provided each piece of additional information
 
 These integrations may be considered for future development, for example as part of a master's thesis extension.
+
+## Future Transitive Dependency Analysis
+
+Potential future extension:
+
+- Support optional `package-lock.json` upload
+- Parse exact dependency tree from lockfile
+- Identify direct and transitive dependencies
+- Query OSV API for all resolved package versions
+- Mark whether vulnerability comes from a direct or transitive dependency
+- Show dependency path, for example: `project → express → body-parser → qs`
+
+This is not part of the current MVP scope and may be considered after the thesis MVP is completed.
