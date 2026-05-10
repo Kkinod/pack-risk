@@ -16,7 +16,14 @@ All notable changes to this project will be documented in this section.
 - `POST /api/ai-assessment` - accepts `{ report: AnalysisReport }`, returns `{ assessment: AISecurityAssessment }`; returns 503 when API key is missing, 502 on LLM failure — technical report from `/api/analyze` is unaffected
 - `.env.example` - template with `OPENAI_API_KEY` and `OPENAI_MODEL`
 - 12 new unit tests across `buildAIInput` and `generateAssessment`
-- Post-MVP optimization notes in `ROADMAP.md` and `PROJECT_STATUS.md`: key-based response cache, SSE streaming, rate limiting, zod schema validation, token telemetry
+- Post-MVP optimization notes in `ROADMAP.md` and `PROJECT_STATUS.md`: key-based response cache, SSE streaming, rate limiting, token telemetry
+- Zod schema validation for `AISecurityAssessment` — replaces manual JSON parsing; non-empty string constraints on all required fields
+- `max_tokens: 2000` cap and explicit `finish_reason` checks (`length`, `content_filter`) on AI responses
+- `getOpenAIClient()` lazy singleton — client created once and reused across calls
+- `generateAssessment` accepts optional `{ signal?: AbortSignal }` for request cancellation
+- `buildUserPrompt` wraps input in `<USER_DATA>` delimiters with prompt injection defense in system prompt
+- `buildUserPrompt` uses compact `JSON.stringify` (no pretty-print) to reduce prompt token count
+- `zod` dependency for runtime schema validation
 
 ### Changed
 
