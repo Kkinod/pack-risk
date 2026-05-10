@@ -48,7 +48,7 @@ Completed:
 
 Missing:
 
-- ❌ AI report generation step
+- ❌ AI report generation step (UI only — backend ready)
 
 ### Report / Dashboard View
 
@@ -80,7 +80,7 @@ Completed:
 
 Missing:
 
-- ❌ AI recommendations section
+- ❌ AI recommendations section (UI only — backend ready)
 
 ## Backend / Analysis Logic Status
 
@@ -89,10 +89,12 @@ Status: implemented
 Implemented:
 
 - ✅ `POST /api/analyze` — full analysis endpoint with error handling and concurrency control
+- ✅ `POST /api/ai-assessment` — accepts `{ report: AnalysisReport }`, returns `{ assessment: AISecurityAssessment }`; 503 when key missing, 502 on LLM failure; independent from technical analysis
 - ✅ `features/package-analysis/server/parseManifest.ts` — parses and validates `package.json`, extracts deps from `dependencies`, `devDependencies`, `peerDependencies`, `optionalDependencies`, strips semver range operators
 - ✅ `features/package-analysis/server/clients/osv.ts` — `POST /v1/querybatch` for all deps in one request, `GET /v1/vulns/{id}` for full vuln details, retry logic, timeout; `OsvVuln` includes `aliases` and `references`
 - ✅ `features/package-analysis/server/clients/npm.ts` — npm Registry client; fetches `/{package}/latest`, handles scoped packages, 404 returns `null`, runs in parallel with OSV in `/api/analyze`
 - ✅ `features/package-analysis/server/buildReport.ts` — severity classification, risk score, recommendations, `latestVersion`, `impact` text per vulnerability, `criticalDependencies`, `topRecommendations`, `summary`
+- ✅ `features/package-analysis/server/ai/` — AI assessment module: `buildAIInput`, `buildPrompt`, `openaiClient`, `generateAssessment`; uses OpenAI chat completions with `response_format: json_object`
 - ✅ `features/package-analysis/api/useAnalyze.ts` — React Query mutation hook calling real API
 - ✅ `AppShell.tsx` — calls real API, shows error on failure, no mock data fallback
 - ✅ `lib/http/client.ts` — shared HTTP client with retry and timeout
@@ -102,13 +104,14 @@ Implemented:
 - ✅ `features/package-analysis/utils/ReportPdfDocument.tsx` — `@react-pdf/renderer` document component + `renderReportPdfBlob`
 - ✅ `features/package-analysis/utils/exportReportPdf.ts` — PDF entry point; lazy-imports `ReportPdfDocument` so `@react-pdf/renderer` is only loaded when PDF export is triggered
 
-OSV API is the primary vulnerability source.
+OSV API is the primary vulnerability source. OpenAI API is used for AI security assessment generation.
 
 ## Current Priority
 
-Report export is complete (JSON + PDF, format selector in UI). Next priorities:
+AI assessment backend is complete. Next priorities:
 
-- ❌ AI recommendations section
+- ❌ AI Security Assessment UI section in dashboard (Step 3)
+- ❌ AI generation step in Analyze view (Step 4)
 - ❌ MVP stabilization (error handling, edge cases, README/changelog polish for thesis)
 
 ## Not a Priority Right Now
@@ -118,6 +121,16 @@ Report export is complete (JSON + PDF, format selector in UI). Next priorities:
 - Additional charts
 - UI polishing beyond current state
 - AI recommendations (after UI report sections are done)
+
+## Post-MVP — AI Assessment Optimizations
+
+Out of MVP scope. Consider after thesis stabilization:
+
+- Key-based AI response cache (hash of `AIInput` → cached `AISecurityAssessment`) to avoid repeated LLM calls for identical reports. In-memory LRU for dev, Redis / Vercel KV for production.
+- Streaming responses (SSE) for perceived latency improvement.
+- Per-user / per-IP rate limiting on `/api/ai-assessment` to control LLM cost exposure.
+- Runtime schema validation of LLM JSON output (e.g. `zod`).
+- Telemetry for token usage and assessment latency.
 
 ## Development Rule
 

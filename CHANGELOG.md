@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.10.0] - 2026-05-09
+
+### Added
+
+- AI security assessment module (`features/package-analysis/server/ai/`) - generates a human-readable security assessment from an existing `AnalysisReport` using an external LLM (OpenAI `gpt-4o-mini` by default)
+- `AIInput` type - a trimmed projection of `AnalysisReport` sent to the model (top 10 vulnerable deps by severity weight, truncated summaries, no raw OSV data)
+- `AISecurityAssessment` type - structured LLM output: `generalAssessment`, `riskExplanation`, `repairPriorities`, `keyPackagesReasoning`, `dependencyRecommendations`
+- `buildAIInput(report)` - builds `AIInput` from `AnalysisReport`; ranks deps by severity + prod boost, limits to 10, truncates vuln summaries to 240 chars
+- `buildPrompt` - system prompt enforcing JSON-only output and no hallucination of CVE data; `buildUserPrompt(input)` injects the `AIInput` payload
+- `openaiClient` - thin wrapper around shared `httpClient` with 30 s timeout, retry ×2, `Authorization: Bearer` header loaded from `OPENAI_API_KEY` env var; model configurable via `OPENAI_MODEL` (default `gpt-4o-mini`)
+- `generateAssessment(report, client?)` - orchestrates input building → chat completion call (`temperature: 0.2`, `response_format: json_object`) → JSON parsing → typed `AISecurityAssessment`; throws `AIAssessmentError` on any failure
+- `POST /api/ai-assessment` - accepts `{ report: AnalysisReport }`, returns `{ assessment: AISecurityAssessment }`; returns 503 when API key is missing, 502 on LLM failure — technical report from `/api/analyze` is unaffected
+- `.env.example` - template with `OPENAI_API_KEY` and `OPENAI_MODEL`
+- 12 new unit tests across `buildAIInput` and `generateAssessment`
+- Post-MVP optimization notes in `ROADMAP.md` and `PROJECT_STATUS.md`: key-based response cache, SSE streaming, rate limiting, zod schema validation, token telemetry
+
+### Changed
+
+- `.gitignore` - added `!.env.example` exception so the template is committed
+
 ## [0.9.0] - 2026-05-07
 
 ### Added

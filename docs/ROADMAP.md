@@ -236,30 +236,30 @@ The AI security assessment should include:
 
 ### Step 1 — Prepare AI input data
 
-Status: planned
+Status: done
 
 Tasks:
 
-- Define the AI report data structure
-- Build AI input from the existing `AnalysisReport`
-- Include risk score, severity breakdown, critical dependencies, top recommendations, package versions, fixed versions, latest versions, and vulnerability summaries
-- Keep AI input limited to already verified OSV and npm Registry data
-- Exclude unnecessary raw data from the AI prompt
+- ✅ Define the AI report data structure (`AIInput`, `AISecurityAssessment`, `RepairPriority`, `KeyPackageReasoning`, `DependencyRecommendation` in `features/package-analysis/server/ai/types.ts`)
+- ✅ Build AI input from the existing `AnalysisReport` (`buildAIInput` — top 10 vulnerable deps by severity weight, prod boost ×1.2, vuln summary truncation to 240 chars)
+- ✅ Include risk score, severity breakdown, critical dependencies, top recommendations, package versions, fixed versions, latest versions, and vulnerability summaries
+- ✅ Keep AI input limited to already verified OSV and npm Registry data
+- ✅ Exclude unnecessary raw data from the AI prompt
 
 ### Step 2 — Backend AI security assessment generation
 
-Status: planned
+Status: done
 
 Tasks:
 
-- Add server-side AI assessment generation module
-- Generate a project-level security assessment
-- Generate simple-language risk explanation
-- Generate repair priorities
-- Generate reasoning for why selected packages should be fixed first
-- Generate recommendations for selected dependencies
-- Add fallback behavior when AI generation fails
-- Keep the technical report available even if AI generation fails
+- ✅ Add server-side AI assessment generation module (`features/package-analysis/server/ai/`)
+- ✅ Generate a project-level security assessment
+- ✅ Generate simple-language risk explanation
+- ✅ Generate repair priorities
+- ✅ Generate reasoning for why selected packages should be fixed first
+- ✅ Generate recommendations for selected dependencies
+- ✅ Add fallback behavior when AI generation fails (`AIAssessmentError`, 502/503 responses)
+- ✅ Keep the technical report available even if AI generation fails (separate endpoint `POST /api/ai-assessment`)
 
 ### Step 3 — UI: add AI Security Assessment section
 
@@ -291,6 +291,18 @@ Recommended branch:
 ```bash
 feat/ai-security-assessment
 ```
+
+### Post-MVP — AI assessment optimizations
+
+Status: not in MVP scope. Consider after thesis stabilization.
+
+Possible improvements:
+
+- Key-based response cache (hash of `AIInput` → cached `AISecurityAssessment`) to avoid repeated LLM calls for identical reports. Storage options: in-memory LRU for short-lived dev runs, or Redis / Vercel KV for production deployments.
+- Streaming responses (SSE) to improve perceived latency in the UI.
+- Per-user / per-IP rate limiting on `/api/ai-assessment` to control LLM cost exposure.
+- Structured output validation with a runtime schema validator (e.g. `zod`) to harden parsing of LLM JSON responses.
+- Telemetry for token usage and assessment latency.
 
 ## 6. Final thesis MVP stabilization
 
