@@ -72,7 +72,7 @@ describe("generateAssessment", () => {
       ],
     };
     const client = makeClient(JSON.stringify(aiPayload));
-    const result = await generateAssessment(makeReport(), client);
+    const result = await generateAssessment(makeReport(), { client });
 
     expect(result.generalAssessment).toContain("high-severity");
     expect(result.repairPriorities).toHaveLength(1);
@@ -92,7 +92,7 @@ describe("generateAssessment", () => {
         dependencyRecommendations: [],
       })
     );
-    await generateAssessment(makeReport(), client);
+    await generateAssessment(makeReport(), { client });
 
     const call = vi.mocked(client.createChatCompletion).mock.calls[0][0];
     expect(call.messages[0].role).toBe("system");
@@ -104,14 +104,14 @@ describe("generateAssessment", () => {
   it("throws AIAssessmentError when AI returns invalid JSON", async () => {
     const client = makeClient("not json at all");
     await expect(
-      generateAssessment(makeReport(), client)
+      generateAssessment(makeReport(), { client })
     ).rejects.toBeInstanceOf(AIAssessmentError);
   });
 
   it("throws AIAssessmentError when required fields are missing", async () => {
     const client = makeClient(JSON.stringify({ repairPriorities: [] }));
     await expect(
-      generateAssessment(makeReport(), client)
+      generateAssessment(makeReport(), { client })
     ).rejects.toBeInstanceOf(AIAssessmentError);
   });
 
@@ -123,7 +123,7 @@ describe("generateAssessment", () => {
         .mockRejectedValue(new Error("network down")),
     };
     await expect(
-      generateAssessment(makeReport(), client)
+      generateAssessment(makeReport(), { client })
     ).rejects.toBeInstanceOf(AIAssessmentError);
   });
 
@@ -134,7 +134,7 @@ describe("generateAssessment", () => {
         riskExplanation: "ok",
       })
     );
-    const result = await generateAssessment(makeReport(), client);
+    const result = await generateAssessment(makeReport(), { client });
     expect(result.repairPriorities).toEqual([]);
     expect(result.keyPackagesReasoning).toEqual([]);
     expect(result.dependencyRecommendations).toEqual([]);

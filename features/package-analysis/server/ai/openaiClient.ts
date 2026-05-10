@@ -12,6 +12,7 @@ export interface ChatCompletionRequest {
   model: string;
   messages: ChatMessage[];
   temperature?: number;
+  max_tokens?: number;
   response_format?: { type: "json_object" };
 }
 
@@ -20,11 +21,17 @@ export interface ChatCompletionResponse {
     message: { role: string; content: string };
     finish_reason: string;
   }>;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
 }
 
 export interface OpenAIClient {
   createChatCompletion(
-    body: Omit<ChatCompletionRequest, "model"> & { model?: string }
+    body: Omit<ChatCompletionRequest, "model"> & { model?: string },
+    opts?: { signal?: AbortSignal }
   ): Promise<ChatCompletionResponse>;
   readonly model: string;
 }
@@ -35,6 +42,8 @@ export class MissingApiKeyError extends Error {
     this.name = "MissingApiKeyError";
   }
 }
+
+let cachedClient: OpenAIClient | null = null;
 
 export function createOpenAIClient(): OpenAIClient {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -52,10 +61,21 @@ export function createOpenAIClient(): OpenAIClient {
 
   return {
     model,
-    createChatCompletion: (body) =>
-      client.post<ChatCompletionResponse>("/chat/completions", {
-        model: body.model ?? model,
-        ...body,
-      }),
+    createChatCompletion: (body, opts) =>
+      client.post<ChatCompletionResponse>(
+        "/chat/completions",
+        {
+          model: body.model ?? model,
+          ...body,
+        },
+        { signal: opts?.signal }
+      ),
   };
+}
+
+export function getOpenAIClient(): OpenAIClient {
+  if (!cachedClient) {
+    cachedClient = createOpenAIClient();
+  }
+  return cachedClient;
 }
