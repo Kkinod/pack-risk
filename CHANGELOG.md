@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.11.0] - 2026-05-16
+
+### Added
+
+- `AIAssessment` component (`features/package-analysis/views/Dashboard/components/AIAssessment.tsx`) — AI Security Assessment section rendered between `TopIssues` and the dependency table; gated by an explicit `Generate AI Security Assessment` button so the LLM is only called on user action
+- `useAIAssessment` React Query mutation hook (`features/package-analysis/api/useAIAssessment.ts`) calling `POST /api/ai-assessment` with the current `AnalysisReport`
+- Loading, error, and result states for the AI section; 503 surfaces as "not configured", 502 as "upstream error", everything else as generic with a retry button
+- Four reasoning-focused result blocks: executive summary (narrative synthesis), prioritized action plan (numbered steps with `effort` + `breakingRisk` badges, `rationale`, optional `unblocks` highlight), reasoning (`orderRationale` prose + cross-package `correlations` cards with affected-package chips), strategic recommendations grouped by category (`deprecation` / `architecture` / `tooling` / `process`)
+- Analyze view (`Loading.tsx`) now shows a visually separated `AI-assisted (optional)` group below the technical steps, with a `Generating AI-based security assessment` row and `available on report` status meta — clarifies that AI runs separately from deterministic analysis
+- `aiAssessment.*`, `loading.steps.ai`, `loading.status.optional`, `loading.aiGroupLabel`, and `loading.technicalGroupLabel` i18n strings in `locales/en.ts`
+- Unit tests covering the new schema: invalid `effort` enum, invalid strategic category, and default-empty `unblocks` field
+
+### Changed
+
+- `AISecurityAssessment` output schema reshaped to deliver reasoning instead of paraphrasing the dependency table: `executiveSummary`, `prioritizedActionPlan[ActionStep]` (with `effort`, `breakingRisk`, `rationale`, optional `unblocks`), `reasoning` (`orderRationale` + `correlations[]`), `strategicRecommendations[]`. Replaces the previous `generalAssessment` / `riskExplanation` / `repairPriorities` / `keyPackagesReasoning` / `dependencyRecommendations` shape
+- `buildPrompt.ts` system prompt rewritten to demand synthesis, trade-off reasoning, cross-package correlations, and strategic non-CVE recommendations; explicitly forbids paraphrasing OSV / npm data and authorizes ecosystem-knowledge use (deprecations, alternatives, breaking-change estimates) while still forbidding invented CVE IDs, package names, and version numbers
+- `generateAssessment` Zod schema updated to validate the new shape with strict enums for `effort`, `breakingRisk`, and strategic `category`
+
 ## [0.10.0] - 2026-05-09
 
 ### Added

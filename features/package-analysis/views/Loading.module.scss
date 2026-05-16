@@ -115,6 +115,30 @@
   color: var(--text-subtle);
 }
 
+.groupLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-subtle);
+  padding: 2px 4px 8px;
+}
+
+.groupDivider {
+  height: 1px;
+  background: var(--border);
+  margin: 14px 0 14px;
+}
+
+.stepOptional {
+  color: var(--text-subtle);
+  font-style: italic;
+
+  & .stepIcon {
+    border-style: dashed;
+  }
+}
+
 .spinner {
   width: 10px;
   height: 10px;

@@ -33,26 +33,44 @@ export interface AIInput {
   topRecommendations: string[];
 }
 
-export interface RepairPriority {
+export type Effort = "low" | "medium" | "high";
+export type BreakingRisk = "low" | "medium" | "high";
+export type StrategicCategory =
+  | "deprecation"
+  | "architecture"
+  | "tooling"
+  | "process";
+
+export interface ActionStep {
+  order: number;
   packageName: string;
-  reason: string;
   action: string;
+  effort: Effort;
+  breakingRisk: BreakingRisk;
+  unblocks?: string;
+  rationale: string;
 }
 
-export interface KeyPackageReasoning {
-  packageName: string;
-  reasoning: string;
+export interface RiskCorrelation {
+  title: string;
+  description: string;
+  affectedPackages: string[];
 }
 
-export interface DependencyRecommendation {
-  packageName: string;
-  recommendation: string;
+export interface AssessmentReasoning {
+  orderRationale: string;
+  correlations: RiskCorrelation[];
+}
+
+export interface StrategicRecommendation {
+  title: string;
+  description: string;
+  category: StrategicCategory;
 }
 
 export interface AISecurityAssessment {
-  generalAssessment: string;
-  riskExplanation: string;
-  repairPriorities: RepairPriority[];
-  keyPackagesReasoning: KeyPackageReasoning[];
-  dependencyRecommendations: DependencyRecommendation[];
+  executiveSummary: string;
+  prioritizedActionPlan: ActionStep[];
+  reasoning: AssessmentReasoning;
+  strategicRecommendations: StrategicRecommendation[];
 }

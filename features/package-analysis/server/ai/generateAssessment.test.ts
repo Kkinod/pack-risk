@@ -52,46 +52,57 @@ function makeClient(content: string): OpenAIClient {
   };
 }
 
+const VALID_PAYLOAD = {
+  executiveSummary:
+    "Project has one high-severity issue in a production dependency.",
+  prioritizedActionPlan: [
+    {
+      order: 1,
+      packageName: "lodash",
+      action: "Upgrade to 4.17.21",
+      effort: "low",
+      breakingRisk: "low",
+      unblocks: "",
+      rationale: "Drop-in patch, no API surface change.",
+    },
+  ],
+  reasoning: {
+    orderRationale:
+      "Only one vulnerable package — fix immediately, no ordering trade-offs.",
+    correlations: [
+      {
+        title: "Utility lib reliance",
+        description: "Project relies on lodash for utils.",
+        affectedPackages: ["lodash"],
+      },
+    ],
+  },
+  strategicRecommendations: [
+    {
+      title: "Enable Dependabot",
+      description: "Catch future patches automatically.",
+      category: "tooling",
+    },
+  ],
+};
+
 describe("generateAssessment", () => {
   it("parses a valid JSON response into an AISecurityAssessment", async () => {
-    const aiPayload = {
-      generalAssessment: "Project has one high-severity issue.",
-      riskExplanation: "One package needs an upgrade.",
-      repairPriorities: [
-        {
-          packageName: "lodash",
-          reason: "high severity",
-          action: "upgrade to 4.17.21",
-        },
-      ],
-      keyPackagesReasoning: [
-        { packageName: "lodash", reasoning: "production dep, exploitable" },
-      ],
-      dependencyRecommendations: [
-        { packageName: "lodash", recommendation: "Upgrade to 4.17.21" },
-      ],
-    };
-    const client = makeClient(JSON.stringify(aiPayload));
+    const client = makeClient(JSON.stringify(VALID_PAYLOAD));
     const result = await generateAssessment(makeReport(), { client });
 
-    expect(result.generalAssessment).toContain("high-severity");
-    expect(result.repairPriorities).toHaveLength(1);
-    expect(result.repairPriorities[0].packageName).toBe("lodash");
-    expect(result.dependencyRecommendations[0].recommendation).toContain(
-      "4.17.21"
-    );
+    expect(result.executiveSummary).toContain("high-severity");
+    expect(result.prioritizedActionPlan).toHaveLength(1);
+    expect(result.prioritizedActionPlan[0].packageName).toBe("lodash");
+    expect(result.prioritizedActionPlan[0].effort).toBe("low");
+    expect(result.prioritizedActionPlan[0].breakingRisk).toBe("low");
+    expect(result.reasoning.orderRationale).toContain("Only one");
+    expect(result.reasoning.correlations).toHaveLength(1);
+    expect(result.strategicRecommendations[0].category).toBe("tooling");
   });
 
   it("sends system + user messages with json_object response_format", async () => {
-    const client = makeClient(
-      JSON.stringify({
-        generalAssessment: "ok",
-        riskExplanation: "ok",
-        repairPriorities: [],
-        keyPackagesReasoning: [],
-        dependencyRecommendations: [],
-      })
-    );
+    const client = makeClient(JSON.stringify(VALID_PAYLOAD));
     await generateAssessment(makeReport(), { client });
 
     const call = vi.mocked(client.createChatCompletion).mock.calls[0][0];
@@ -109,7 +120,40 @@ describe("generateAssessment", () => {
   });
 
   it("throws AIAssessmentError when required fields are missing", async () => {
-    const client = makeClient(JSON.stringify({ repairPriorities: [] }));
+    const client = makeClient(JSON.stringify({ prioritizedActionPlan: [] }));
+    await expect(
+      generateAssessment(makeReport(), { client })
+    ).rejects.toBeInstanceOf(AIAssessmentError);
+  });
+
+  it("throws AIAssessmentError when effort enum is invalid", async () => {
+    const bad = {
+      ...VALID_PAYLOAD,
+      prioritizedActionPlan: [
+        {
+          ...VALID_PAYLOAD.prioritizedActionPlan[0],
+          effort: "trivial",
+        },
+      ],
+    };
+    const client = makeClient(JSON.stringify(bad));
+    await expect(
+      generateAssessment(makeReport(), { client })
+    ).rejects.toBeInstanceOf(AIAssessmentError);
+  });
+
+  it("throws AIAssessmentError when strategic category is invalid", async () => {
+    const bad = {
+      ...VALID_PAYLOAD,
+      strategicRecommendations: [
+        {
+          title: "x",
+          description: "y",
+          category: "random",
+        },
+      ],
+    };
+    const client = makeClient(JSON.stringify(bad));
     await expect(
       generateAssessment(makeReport(), { client })
     ).rejects.toBeInstanceOf(AIAssessmentError);
@@ -130,13 +174,32 @@ describe("generateAssessment", () => {
   it("defaults missing arrays to empty arrays", async () => {
     const client = makeClient(
       JSON.stringify({
-        generalAssessment: "ok",
-        riskExplanation: "ok",
+        executiveSummary: "ok",
+        reasoning: { orderRationale: "ok" },
       })
     );
     const result = await generateAssessment(makeReport(), { client });
-    expect(result.repairPriorities).toEqual([]);
-    expect(result.keyPackagesReasoning).toEqual([]);
-    expect(result.dependencyRecommendations).toEqual([]);
+    expect(result.prioritizedActionPlan).toEqual([]);
+    expect(result.reasoning.correlations).toEqual([]);
+    expect(result.strategicRecommendations).toEqual([]);
+  });
+
+  it("defaults missing unblocks field to empty string", async () => {
+    const payload = {
+      ...VALID_PAYLOAD,
+      prioritizedActionPlan: [
+        {
+          order: 1,
+          packageName: "lodash",
+          action: "Upgrade to 4.17.21",
+          effort: "low",
+          breakingRisk: "low",
+          rationale: "Drop-in patch.",
+        },
+      ],
+    };
+    const client = makeClient(JSON.stringify(payload));
+    const result = await generateAssessment(makeReport(), { client });
+    expect(result.prioritizedActionPlan[0].unblocks).toBe("");
   });
 });

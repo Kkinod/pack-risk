@@ -14,30 +14,47 @@ export class AIAssessmentError extends Error {
   }
 }
 
-const repairPrioritySchema = z.object({
+const effortSchema = z.enum(["low", "medium", "high"]);
+const breakingRiskSchema = z.enum(["low", "medium", "high"]);
+const strategicCategorySchema = z.enum([
+  "deprecation",
+  "architecture",
+  "tooling",
+  "process",
+]);
+
+const actionStepSchema = z.object({
+  order: z.number().int().positive(),
   packageName: z.string().min(1),
-  reason: z.string().min(1),
   action: z.string().min(1),
+  effort: effortSchema,
+  breakingRisk: breakingRiskSchema,
+  unblocks: z.string().default(""),
+  rationale: z.string().min(1),
 });
 
-const keyPackageReasoningSchema = z.object({
-  packageName: z.string().min(1),
-  reasoning: z.string().min(1),
+const riskCorrelationSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  affectedPackages: z.array(z.string().min(1)).default([]),
 });
 
-const dependencyRecommendationSchema = z.object({
-  packageName: z.string().min(1),
-  recommendation: z.string().min(1),
+const reasoningSchema = z.object({
+  orderRationale: z.string().min(1),
+  correlations: z.array(riskCorrelationSchema).default([]),
+});
+
+const strategicRecommendationSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  category: strategicCategorySchema,
 });
 
 const assessmentSchema = z.object({
-  generalAssessment: z.string().min(1),
-  riskExplanation: z.string().min(1),
-  repairPriorities: z.array(repairPrioritySchema).default([]),
-  keyPackagesReasoning: z.array(keyPackageReasoningSchema).default([]),
-  dependencyRecommendations: z
-    .array(dependencyRecommendationSchema)
-    .default([]),
+  executiveSummary: z.string().min(1),
+  prioritizedActionPlan: z.array(actionStepSchema).default([]),
+  reasoning: reasoningSchema,
+  strategicRecommendations: z.array(strategicRecommendationSchema).default([]),
 });
 
 function parseAssessment(raw: string): AISecurityAssessment {

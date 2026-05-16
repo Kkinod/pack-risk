@@ -30,7 +30,7 @@ Missing:
 
 ### Analyze View
 
-Status: mostly completed
+Status: completed
 
 Completed:
 
@@ -45,14 +45,11 @@ Completed:
   - ✅ running
   - ✅ done
 - ✅ Readable loading state
-
-Missing:
-
-- ❌ AI report generation step (UI only — backend ready)
+- ✅ AI assessment step shown as a separate, visually divided group (`AI-assisted (optional)`) below the technical steps with `available on report` meta — AI runs only on explicit user action from the report screen
 
 ### Report / Dashboard View
 
-Status: partially completed
+Status: completed
 
 Completed:
 
@@ -77,10 +74,7 @@ Completed:
 - ✅ JSON export of the analysis report (`Export report` button triggers download of `pack-risk-{project}-YYYY-MM-DD.json`)
 - ✅ Export format selector (JSON / PDF) with disabled-while-exporting state and error feedback
 - ✅ PDF export of the analysis report (header, risk score card, summary, critical dependencies, top recommendations, full dependency table, paginated footer)
-
-Missing:
-
-- ❌ AI recommendations section (UI only — backend ready)
+- ✅ AI Security Assessment section (`AIAssessment` component between `TopIssues` and the dependency table) — `Generate AI Security Assessment` button gates the LLM call; loading, error (503 / 502 / generic), and result states; four sections: executive summary, prioritized action plan with effort + breaking-risk badges, reasoning (order rationale + cross-package correlations), strategic recommendations grouped by category
 
 ## Backend / Analysis Logic Status
 
@@ -94,8 +88,9 @@ Implemented:
 - ✅ `features/package-analysis/server/clients/osv.ts` — `POST /v1/querybatch` for all deps in one request, `GET /v1/vulns/{id}` for full vuln details, retry logic, timeout; `OsvVuln` includes `aliases` and `references`
 - ✅ `features/package-analysis/server/clients/npm.ts` — npm Registry client; fetches `/{package}/latest`, handles scoped packages, 404 returns `null`, runs in parallel with OSV in `/api/analyze`
 - ✅ `features/package-analysis/server/buildReport.ts` — severity classification, risk score, recommendations, `latestVersion`, `impact` text per vulnerability, `criticalDependencies`, `topRecommendations`, `summary`
-- ✅ `features/package-analysis/server/ai/` — AI assessment module: `buildAIInput`, `buildPrompt`, `openaiClient`, `generateAssessment`; uses OpenAI chat completions with `response_format: json_object`
+- ✅ `features/package-analysis/server/ai/` — AI assessment module: `buildAIInput`, `buildPrompt`, `openaiClient`, `generateAssessment`; uses OpenAI chat completions with `response_format: json_object`. Output schema reshaped around reasoning: `executiveSummary`, `prioritizedActionPlan[ActionStep]` (with `effort`, `breakingRisk`, `rationale`, optional `unblocks`), `reasoning` (`orderRationale` + `correlations[]`), `strategicRecommendations[]` (categories: `deprecation` / `architecture` / `tooling` / `process`). Prompt explicitly forbids paraphrasing the dependency table and demands synthesis, trade-offs, and cross-package correlations.
 - ✅ `features/package-analysis/api/useAnalyze.ts` — React Query mutation hook calling real API
+- ✅ `features/package-analysis/api/useAIAssessment.ts` — React Query mutation hook calling `POST /api/ai-assessment` with the analysis report; returns typed `AISecurityAssessment`
 - ✅ `AppShell.tsx` — calls real API, shows error on failure, no mock data fallback
 - ✅ `lib/http/client.ts` — shared HTTP client with retry and timeout
 - ✅ `lib/concurrency.ts` — pool utility for concurrent vuln detail fetching
@@ -108,10 +103,8 @@ OSV API is the primary vulnerability source. OpenAI API is used for AI security 
 
 ## Current Priority
 
-AI assessment backend is complete. Next priorities:
+AI assessment frontend and backend are complete. Remaining priority:
 
-- ❌ AI Security Assessment UI section in dashboard (Step 3)
-- ❌ AI generation step in Analyze view (Step 4)
 - ❌ MVP stabilization (error handling, edge cases, README/changelog polish for thesis)
 
 ## Not a Priority Right Now

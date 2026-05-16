@@ -10,6 +10,7 @@ import { DependencyTable } from "./Dashboard/components/DependencyTable";
 import { TopIssues } from "./Dashboard/components/TopIssues";
 import { ReportSummary } from "./Dashboard/components/ReportSummary";
 import { ExportControl } from "./Dashboard/components/ExportControl";
+import { AIAssessment } from "./Dashboard/components/AIAssessment";
 import { t } from "@/locales";
 import styles from "./Dashboard.module.scss";
 
@@ -136,6 +137,7 @@ export default function Dashboard({
       </div>
 
       <TopIssues dependencies={report.criticalDependencies} />
+      <AIAssessment report={report} />
       <DependencyTable {...table} />
       <ReportSummary report={report} />
     </section>

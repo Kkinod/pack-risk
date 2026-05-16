@@ -52,12 +52,16 @@ export const en = {
       deps: "Resolving dependency tree",
       vuln: "Querying vulnerability databases",
       risk: "Calculating risk score",
+      ai: "Generating AI-based security assessment",
     },
     status: {
       done: "✓ done",
       running: "running…",
       queued: "queued",
+      optional: "available on report",
     },
+    aiGroupLabel: "AI-assisted (optional)",
+    technicalGroupLabel: "Technical analysis",
   },
   dashboard: {
     title: "Security report",
@@ -179,6 +183,67 @@ export const en = {
         "Low impact. Minor issue with limited exploitability under realistic conditions.",
       tooling:
         "Minimal impact. Cosmetic or low-severity issue in development tooling.",
+    },
+  },
+  aiAssessment: {
+    title: "AI Security Assessment",
+    intro:
+      "AI-generated synthesis on top of the technical report: prioritized action plan with effort and breaking-change estimates, cross-package reasoning, and strategic recommendations beyond single CVEs.",
+    generate: "Generate AI Security Assessment",
+    regenerate: "Regenerate",
+    poweredBy:
+      "AI-generated reasoning on top of OSV + npm Registry data. Verify breaking-change estimates before acting.",
+    sections: {
+      executiveSummary: "Executive Summary",
+      prioritizedActionPlan: "Prioritized Action Plan",
+      reasoning: "Reasoning & Risk Correlations",
+      strategicRecommendations: "Strategic Recommendations",
+    },
+    actionPlan: {
+      effortLabel: "Effort",
+      breakingRiskLabel: "Breaking risk",
+      unblocksLabel: "Unblocks",
+      effort: {
+        low: "Low (~5 min)",
+        medium: "Medium (~1 h)",
+        high: "High (½ day+)",
+      },
+      breakingRisk: {
+        low: "Low",
+        medium: "Medium",
+        high: "High",
+      },
+      stepLabel: (n: number) => `Step ${n}`,
+    },
+    reasoning: {
+      orderRationaleLabel: "Why this order",
+      correlationsLabel: "Cross-package correlations",
+      affectedLabel: "Affected:",
+    },
+    strategic: {
+      categoryLabel: {
+        deprecation: "Deprecation",
+        architecture: "Architecture",
+        tooling: "Tooling",
+        process: "Process",
+      },
+    },
+    loading: {
+      label: "Generating AI security assessment",
+      hint: "Calling the language model. This typically takes a few seconds.",
+    },
+    errors: {
+      generic:
+        "AI security assessment could not be generated. Please try again.",
+      notConfigured:
+        "AI security assessment is not configured on this server. The technical report remains fully available.",
+      upstream: "The language model returned an error. Try again in a moment.",
+      retry: "Try again",
+    },
+    empty: {
+      prioritizedActionPlan: "No prioritized actions returned for this report.",
+      correlations: "No cross-package correlations identified.",
+      strategicRecommendations: "No strategic recommendations returned.",
     },
   },
   topIssues: {

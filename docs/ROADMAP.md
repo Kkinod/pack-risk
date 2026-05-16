@@ -63,7 +63,7 @@ Tasks:
 - ✅ Compare `latestVersion` with `fixedIn` when possible
 - ✅ Keep generic recommendation text only when no reliable version data is available
 
-Recommended branch:
+Branch:
 
 ```bash
 feat/npm-registry-integration
@@ -130,7 +130,7 @@ Tasks:
 - ✅ Display impact text per vulnerability
 - ✅ Keep the expanded row focused on package-level technical details
 
-Recommended branch:
+Branch:
 
 ```bash
 feat/report-improvements
@@ -212,7 +212,7 @@ Tasks:
 - ✅ Use a readable file name, for example `pack-risk-report-YYYY-MM-DD.pdf`
 - ✅ Keep PDF generation logic separated from UI components
 
-Recommended branch:
+Branch:
 
 ```bash
 feat/report-export
@@ -263,30 +263,48 @@ Tasks:
 
 ### Step 3 — UI: add AI Security Assessment section
 
-Status: planned
+The AI Security Assessment should be displayed as a separate report section between the "Most Important Issues" section and the dependency table.
+
+The technical report should always remain fully accessible independently from AI-generated content.
+
+The AI section should focus on:
+
+- high-level project security assessment,
+- human-readable risk explanation,
+- prioritized repair recommendations,
+- explanation of why selected dependencies are considered high priority,
+- concise and actionable recommendations instead of repeating raw vulnerability data.
+
+The section should initially display a `Generate AI Security Assessment` button. The AI assessment should only be generated after explicit user action.
+
+During implementation the AI output schema was reshaped around reasoning-focused content: `executiveSummary`, `prioritizedActionPlan` (with effort + breaking-risk + rationale per step), `reasoning` (`orderRationale` + cross-package `correlations`), and `strategicRecommendations` (deprecation, architecture, tooling, process). This replaces the original `generalAssessment` / `riskExplanation` / `repairPriorities` / `keyPackagesReasoning` / `dependencyRecommendations` shape, which mostly paraphrased the dependency table.
+
+Status: done
 
 Tasks:
 
-- Add `AI Security Assessment` section to the report view
-- Display general project assessment
-- Display simple-language risk explanation
-- Display prioritized repair actions
-- Display explanations for selected high-priority packages
-- Display dependency-level AI recommendations when useful
-- Add loading and error states
-- Add required UI strings to `locales/en.ts`
+- ✅ Add `AI Security Assessment` section to the report view (`AIAssessment` component between `TopIssues` and the dependency table)
+- ✅ Display executive summary (narrative synthesis of project security posture)
+- ✅ Display prioritized action plan with `effort` + `breakingRisk` badges, `rationale`, and optional `unblocks` highlight
+- ✅ Display reasoning section with `orderRationale` prose and cross-package `correlations` cards (affected packages chips)
+- ✅ Display strategic recommendations grouped by category (deprecation / architecture / tooling / process)
+- ✅ `useAIAssessment` React Query mutation hook calling `POST /api/ai-assessment`
+- ✅ Loading, error, and empty-button states; 503 / 502 / generic error messages
+- ✅ Required UI strings added to `locales/en.ts`
 
 ### Step 4 — Analyze View update
 
-Status: planned
+Status: done
+
+The AI assessment generation flow should be visually separated from the core technical analysis flow to clearly distinguish deterministic vulnerability analysis from AI-assisted interpretation and recommendations.
 
 Tasks:
 
-- Add `Generating AI-based security assessment` step to the Analyze view
-- Clearly separate technical analysis from AI-assisted assessment
-- Show the normal technical report even if AI generation fails
+- ✅ Add `Generating AI-based security assessment` step to the Analyze view (separate group below the technical steps with `available on report` status meta)
+- ✅ Clearly separate technical analysis from AI-assisted assessment (`Technical analysis` group + divider + `AI-assisted (optional)` group)
+- ✅ Show the normal technical report even if AI generation fails (AI runs only on explicit user action from the dashboard; failure does not block the rest of the report)
 
-Recommended branch:
+Branch:
 
 ```bash
 feat/ai-security-assessment
@@ -317,7 +335,7 @@ Tasks:
 - Update README and changelog
 - Prepare screenshots or demo flow for the thesis
 
-Recommended branch:
+Branch:
 
 ```bash
 chore/mvp-stabilization
