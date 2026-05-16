@@ -6,31 +6,41 @@ The project is developed as part of an engineering thesis in Computer Science, s
 
 ## Project Overview
 
-The main goal of the application is to help users quickly understand potential risks related to project dependencies without requiring them to set up or run the analyzed project locally.
+The application helps users quickly understand potential risks related to project dependencies without requiring them to set up or run the analyzed project locally.
 
-The application allows users to provide a `package.json` file or its content, validate its structure, extract dependency information, analyze potential security risks, and present the results in a clear and understandable report.
+Users provide a `package.json` file or paste its content. The application validates the manifest, extracts dependency information, cross-references packages against public vulnerability databases, calculates a risk score, and presents the results in a structured report. An optional AI-assisted security assessment can be generated on top of the technical report.
 
-The target users are mainly developers, but the application should also be understandable for less technical users, such as project managers, testers, or people who want to quickly assess dependency-related risk in a project.
+The target users are mainly developers, but the report is designed to be understandable for less technical users such as project managers or testers.
 
-## Core Features
+## Features
 
 - Upload or paste `package.json` content
-- Validate package manifest structure
-- Extract dependencies from the provided file
-- Analyze dependency-related security risks
-- Display dependency risk summary
-- Present results in a clear report view
-- Support future extension with scoring, AI-based interpretation, and update recommendations
+- Parse and validate the package manifest
+- Query the [OSV API](https://osv.dev) for known vulnerabilities across all dependencies
+- Fetch latest package versions from the npm Registry
+- Calculate an algorithmic risk score (0–100) based on severity weights
+- Display a structured report with severity breakdown, dependency table, and recommendations
+- Most Important Issues section highlighting critical packages
+- Report Summary with top recommendations
+- Expandable dependency rows with CVE details, advisory links (OSV, GHSA, NVD), and impact descriptions
+- Export report as JSON or PDF
+- Optional AI Security Assessment — generates executive summary, prioritized action plan with effort and breaking-change estimates, cross-package reasoning, and strategic recommendations using the OpenAI API
 
 ## Tech Stack
 
-- Next.js
-- TypeScript
-- TanStack Query
-- SCSS Modules
-- pnpm
-- ESLint
+- Next.js 16 (App Router, API routes)
+- React 19
+- TypeScript 5
+- TanStack Query 5
+- Zod 4
+- SCSS Modules (Sass)
+- @react-pdf/renderer 4
+- Vitest 4
+- MSW 2
+- ESLint 9
+- Prettier 3
 - Husky
+- pnpm
 
 ## Getting Started
 
@@ -44,6 +54,12 @@ Run the development server:
 
 ```bash
 pnpm dev
+```
+
+Run tests:
+
+```bash
+pnpm test
 ```
 
 Run type checking:
@@ -64,57 +80,58 @@ Build the application:
 pnpm build
 ```
 
+## Environment Variables
+
+The application works without any environment variables. The AI Security Assessment module is optional and requires an OpenAI API key to function.
+
+Copy `.env.example` to `.env.local` and fill in the values:
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable         | Required | Description                                                                                             |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `OPENAI_API_KEY` | No       | OpenAI API key. Without it, the AI module returns 503 and the technical report remains fully available. |
+| `OPENAI_MODEL`   | No       | OpenAI model to use. Defaults to `gpt-4o-mini`.                                                         |
+
 ## Project Structure
 
-```txt
-app/                         # Next.js App Router pages and API routes
-components/                  # Shared reusable components
-features/                    # Feature-based application modules
-features/package-analysis/   # Main feature for package.json analysis
-public/                      # Static assets
+```
+app/                          # Next.js App Router pages and API routes
+  api/analyze/                # POST /api/analyze — dependency analysis endpoint
+  api/ai-assessment/          # POST /api/ai-assessment — AI assessment endpoint
+components/                   # Shared reusable components
+features/
+  package-analysis/
+    api/                      # React Query mutation hooks (useAnalyze, useAIAssessment)
+    server/                   # Server-side analysis logic
+      clients/                # OSV API and npm Registry clients
+      ai/                     # AI assessment module
+    utils/                    # Export utilities (JSON, PDF)
+    views/                    # UI views (Upload, Loading, Dashboard)
+    types.ts                  # Shared TypeScript types
+lib/
+  http/                       # Shared HTTP client with retry and timeout
+  concurrency.ts              # Concurrency pool utility
+locales/
+  en.ts                       # All UI strings (single source of truth)
+docs/                         # Project documentation
+tests/                        # Integration tests
 ```
 
 ## Project Documentation
 
-The project includes additional documentation in the `docs/` directory to describe the development process and implementation progress.
-
-- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — tracks the current state of the application, including completed features, missing functionality, and current priorities.
-- [`docs/ROADMAP.md`](docs/ROADMAP.md) — describes the planned development roadmap and recommended order of future implementation steps.
-
-This documentation helps maintain a clear project scope and supports further development of the application.
-
-## Development Guidelines
-
-The application is developed with a modular structure.
-
-Code should be split into smaller components, hooks, utilities, and modules when it improves readability, maintainability, testability, or reusability.
-
-The project follows a use-case-oriented structure rather than grouping code only by generic domain nouns. For example, modules should be organized around responsibilities such as package validation, dependency analysis, risk calculation, report generation, and result presentation.
-
-## Future Development
-
-The current version is focused on the engineering thesis scope, but the architecture should allow further development in the future.
-
-Possible future extensions include:
-
-- Advanced dependency risk scoring
-- AI-based vulnerability interpretation
-- Dependency update recommendations
-- Analysis history
-- More detailed reporting
-- Support for additional package ecosystems
-- Integration with external vulnerability databases
+- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — current implementation status, completed features, and priorities
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — development roadmap and milestone history
+- [`CHANGELOG.md`](CHANGELOG.md) — version history
 
 ## Thesis Context
 
 This project is created as part of an engineering thesis focused on cybersecurity and software dependency risk analysis.
 
-The application is intended to demonstrate the design and implementation of a web-based system supporting dependency risk assessment in JavaScript/Node.js projects.
+The application demonstrates the design and implementation of a web-based system supporting dependency risk assessment in JavaScript/Node.js projects, including integration with public vulnerability databases (OSV API, npm Registry) and an optional AI-assisted interpretation layer.
 
 ## License
 
 This project is licensed under the MIT License.
-
-```
-
-```
