@@ -44,6 +44,7 @@ export default function Loading({ onComplete }: LoadingProps) {
           />
         </div>
 
+        <div className={styles.groupLabel}>{t.loading.technicalGroupLabel}</div>
         <ul className={styles.steps}>
           {ANALYSIS_STEPS.map((s, i) => {
             const status =
@@ -71,6 +72,16 @@ export default function Loading({ onComplete }: LoadingProps) {
               </li>
             );
           })}
+        </ul>
+
+        <div className={styles.groupDivider} />
+        <div className={styles.groupLabel}>{t.loading.aiGroupLabel}</div>
+        <ul className={styles.steps}>
+          <li className={`${styles.step} ${styles.stepOptional}`}>
+            <span className={styles.stepIcon} aria-hidden="true" />
+            <span>{t.loading.steps.ai}</span>
+            <span className={styles.stepMeta}>{t.loading.status.optional}</span>
+          </li>
         </ul>
       </div>
     </section>

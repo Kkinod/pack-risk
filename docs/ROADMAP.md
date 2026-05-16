@@ -263,6 +263,20 @@ Tasks:
 
 ### Step 3 — UI: add AI Security Assessment section
 
+The AI Security Assessment should be displayed as a separate report section between the "Most Important Issues" section and the dependency table.
+
+The technical report should always remain fully accessible independently from AI-generated content.
+
+The AI section should focus on:
+
+- high-level project security assessment,
+- human-readable risk explanation,
+- prioritized repair recommendations,
+- explanation of why selected dependencies are considered high priority,
+- concise and actionable recommendations instead of repeating raw vulnerability data.
+
+The section should initially display a `Generate AI Security Assessment` button. The AI assessment should only be generated after explicit user action.
+
 Status: planned
 
 Tasks:
@@ -279,6 +293,8 @@ Tasks:
 ### Step 4 — Analyze View update
 
 Status: planned
+
+The AI assessment generation flow should be visually separated from the core technical analysis flow to clearly distinguish deterministic vulnerability analysis from AI-assisted interpretation and recommendations.
 
 Tasks:
 
