@@ -10,6 +10,7 @@ import type {
 import type { ExtractedDep } from "./parseManifest";
 import type { OsvVuln } from "./clients/osv";
 import { t } from "@/locales";
+import { isVersionAtLeast } from "../utils/risk";
 
 const KNOWN_REFERENCE_TYPES = new Set([
   "ADVISORY",
@@ -119,26 +120,15 @@ function calcRiskLevel(vulns: CVE[]): RiskLevel {
   return "low";
 }
 
-function isVersionAtLeast(a: string, b: string): boolean {
-  const parse = (v: string) => v.split(".").map(Number);
-  const [aMaj = 0, aMin = 0, aPatch = 0] = parse(a);
-  const [bMaj = 0, bMin = 0, bPatch = 0] = parse(b);
-  if (aMaj !== bMaj) return aMaj > bMaj;
-  if (aMin !== bMin) return aMin > bMin;
-  return aPatch >= bPatch;
-}
-
 function buildVersionSuffix(
   fixedIn: string | undefined,
   latestVersion: string | undefined
 ): string {
-  if (
-    latestVersion &&
-    fixedIn &&
-    latestVersion !== fixedIn &&
-    isVersionAtLeast(latestVersion, fixedIn)
-  ) {
-    return ` ${t.recommendations.updateTo(latestVersion)} ${t.recommendations.minFixedVersion(fixedIn)}`;
+  if (latestVersion && fixedIn) {
+    const target = isVersionAtLeast(latestVersion, fixedIn)
+      ? latestVersion
+      : fixedIn;
+    return ` ${t.recommendations.upgradeTo(target)}`;
   }
   const target = fixedIn ?? latestVersion;
   return target ? ` ${t.recommendations.upgradeTo(target)}` : "";
@@ -259,10 +249,14 @@ export function buildReport(params: {
     let fixedIn: string | undefined;
     for (const id of vulnIds) {
       const vuln = vulnDetails.get(id);
-      if (vuln) {
-        fixedIn = extractFixedIn(vuln, dep.name);
-        if (fixedIn) break;
+      if (!vuln) continue;
+      const candidate = extractFixedIn(vuln, dep.name);
+      if (candidate && (!fixedIn || isVersionAtLeast(candidate, fixedIn))) {
+        fixedIn = candidate;
       }
+    }
+    if (fixedIn && !isVersionAtLeast(fixedIn, dep.version)) {
+      fixedIn = undefined;
     }
 
     const riskLevel = calcRiskLevel(vulnerabilities);
