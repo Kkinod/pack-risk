@@ -322,18 +322,18 @@ Possible improvements:
 - Structured output validation with a runtime schema validator (e.g. `zod`) to harden parsing of LLM JSON responses.
 - Telemetry for token usage and assessment latency.
 
-## 6. Final thesis MVP stabilization
+## 6. Final thesis
 
 Goal: prepare the application for engineering thesis presentation.
 
 Tasks:
 
-- Improve error handling and edge cases
-- Add loading and empty states where missing
-- Test with multiple real `package.json` examples
-- Verify report accuracy
-- Update README and changelog
-- Prepare screenshots or demo flow for the thesis
+- ❌ Improve error handling and edge cases
+- ❌ Add loading and empty states where missing
+- ❌ Test with multiple real `package.json` examples
+- ❌ Verify report accuracy
+- ✅ Update README and changelog
+- ❌ Prepare screenshots or demo flow for the thesis
 
 Branch:
 
