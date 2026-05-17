@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.11.1] - 2026-05-17
+
+### Fixed
+
+- `fixedIn` field now stores the highest minimum fixed version across all vulnerabilities for a package instead of the first one found — prevents recommending a version lower than the one already installed
+- `fixedIn` is set to `undefined` when it is not higher than the currently installed version — eliminates misleading downgrade arrows in the Version column
+- `isVersionAtLeast` extracted to `features/package-analysis/utils/risk.ts` as a shared utility (previously duplicated in `buildReport.ts`)
+- Recommendation text simplified — no longer shows "Minimum fixed version is X" alongside "Update to Y"; always recommends a single target version
+
+### Dependencies
+
+- Upgraded `next` and `eslint-config-next` from 16.2.4 to 16.2.6
+- Added `pnpm.overrides` to force `postcss >= 8.5.10`, resolving a moderate XSS advisory (GHSA-qx2v-qp2m-jg93) in the transitive dependency
+
 ## [0.11.0] - 2026-05-16
 
 ### Added
