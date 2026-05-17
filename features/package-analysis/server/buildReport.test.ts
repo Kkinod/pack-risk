@@ -204,8 +204,8 @@ describe("buildReport", () => {
       npmLatestVersions: new Map([["lodash", "4.17.22"]]),
     });
     const rec = report.dependencies[0].recommendation;
-    expect(rec).toContain("Update to 4.17.22.");
-    expect(rec).toContain("Minimum fixed version is 4.17.20.");
+    expect(rec).toContain("4.17.22");
+    expect(rec).not.toContain("4.17.20");
   });
 
   it("uses fixedIn when it is newer than latestVersion", () => {

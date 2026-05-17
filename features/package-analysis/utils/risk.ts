@@ -1,6 +1,15 @@
 import type { RiskLevel } from "../types";
 import { t } from "@/locales";
 
+export function isVersionAtLeast(a: string, b: string): boolean {
+  const parse = (v: string) => v.split(".").map(Number);
+  const [aMaj = 0, aMin = 0, aPatch = 0] = parse(a);
+  const [bMaj = 0, bMin = 0, bPatch = 0] = parse(b);
+  if (aMaj !== bMaj) return aMaj > bMaj;
+  if (aMin !== bMin) return aMin > bMin;
+  return aPatch >= bPatch;
+}
+
 export interface ScoreMeta {
   color: string;
   soft: string;
