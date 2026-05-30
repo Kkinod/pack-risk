@@ -354,6 +354,78 @@ Follow this order:
 
 Do not start AI-related work before npm Registry integration and report improvements are completed.
 
+## 7. Public deployment and landing
+
+Goal: make pack-risk accessible to non-technical users without requiring code setup.
+
+Tasks:
+
+- ❌ Deploy public instance to Vercel without AI key (OSV + npm analysis only, no AI assessment)
+- ❌ Add hybrid landing — minimal copy (2–3 sentences) integrated with upload view, not a separate marketing page
+- ❌ Ensure self-hosting README is complete: env setup, BYOK API key instructions, one-command start
+
+Branch:
+
+```bash
+feat/public-deployment
+```
+
+## 8. Lock file support
+
+Goal: improve analysis accuracy by supporting full dependency trees from lock files, including transitive dependencies.
+
+Currently pack-risk analyzes only direct dependencies declared in `package.json`. Most CVEs affect transitive dependencies, making lock file support a critical accuracy improvement.
+
+Tasks:
+
+- ❌ Support `package-lock.json` (npm)
+- ❌ Support `yarn.lock`
+- ❌ Support `pnpm-lock.yaml`
+- ❌ Parse full dependency tree including transitive dependencies
+- ❌ Add input mode toggle in upload view: `package.json` | Lock file
+- ❌ Keep existing `package.json` flow unchanged
+
+Branch:
+
+```bash
+feat/lock-file-support
+```
+
+## 9. Single package lookup
+
+Goal: add a third input mode for users who want to check a specific package version without uploading a file.
+
+Tasks:
+
+- ❌ Add `Single package` input mode in upload view (alongside `package.json` and lock file)
+- ❌ Accept `name@version` input (e.g. `lodash@4.17.11`)
+- ❌ Reuse existing analysis and report flow for single package result
+
+Branch:
+
+```bash
+feat/single-package-lookup
+```
+
+## 10. Freemium and hosted AI
+
+Goal: add user accounts and AI assessment to the public instance when the product is ready for monetization.
+
+This phase should not be started before phases 7–9 are stable.
+
+Tasks:
+
+- ❌ Add user authentication (accounts)
+- ❌ Add AI assessment to public hosted instance with rate limiting per user
+- ❌ Define freemium tier boundaries (e.g. basic audit free, AI assessment paid)
+- ❌ Evaluate cost of hosted LLM vs self-hosted or cheaper model alternatives
+
+Branch:
+
+```bash
+feat/freemium
+```
+
 ---
 
 ## Future External API Integrations
