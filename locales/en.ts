@@ -24,8 +24,9 @@ export const en = {
     heroSubtitle: "Upload a",
     heroSubtitleBold: "package.json",
     heroSubtitleRest:
-      "and PackRisk will surface vulnerabilities, score risk on a 0–100 scale, and tell you exactly what to fix — in plain language anyone can understand.",
-    heroAudience: "Built for developers, PMs, testers, and security teams.",
+      "and PackRisk will surface vulnerabilities, give you an overall risk overview, and tell you exactly what to fix — with clear, actionable recommendations.",
+    heroAudience:
+      "For anyone who wants to know what risks are hiding in their dependencies.",
     title: "Analyze your package.json for security risk",
     subtitle:
       "Upload a package.json file and we'll cross-reference its dependencies against public vulnerability databases to surface critical issues, outdated packages, and recommended fixes.",
