@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Upload from "@/features/package-analysis/views/Upload";
+import Upload from "@/features/package-analysis/views/Upload/Upload";
 import Loading from "@/features/package-analysis/views/Loading";
 import Dashboard from "@/features/package-analysis/views/Dashboard";
 import { useAnalyze } from "@/features/package-analysis/api/useAnalyze";

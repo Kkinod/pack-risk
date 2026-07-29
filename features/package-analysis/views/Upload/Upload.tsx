@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
 import { IconUpload, IconFile, IconX, IconShield } from "@/components/ui/icons";
-import { SAMPLE_PACKAGE_JSON } from "../data/mockData";
+import { useUpload } from "./hooks/useUpload";
 import { t } from "@/locales";
 import styles from "./Upload.module.scss";
 
@@ -12,67 +11,21 @@ interface UploadProps {
 }
 
 export default function Upload({ onAnalyze, serverError }: UploadProps) {
-  const [fileName, setFileName] = useState<string>("");
-  const [pasted, setPasted] = useState<string>("");
-  const [dragOver, setDragOver] = useState(false);
-  const [error, setError] = useState<string>("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const readFile = useCallback((file: File) => {
-    if (!file.name.endsWith(".json")) {
-      setError(t.upload.errors.jsonFileOnly);
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const txt = String(e.target?.result || "");
-      setFileName(file.name);
-      setPasted(txt);
-      setError("");
-    };
-    reader.readAsText(file);
-  }, []);
-
-  const onDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file) readFile(file);
-  };
-
-  const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) readFile(file);
-  };
-
-  const clear = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setFileName("");
-    setPasted("");
-    if (inputRef.current) inputRef.current.value = "";
-  };
-
-  const useSample = () => {
-    setFileName("package.json (sample)");
-    setPasted(SAMPLE_PACKAGE_JSON);
-    setError("");
-  };
-
-  const start = () => {
-    if (!pasted.trim()) {
-      setError(t.upload.errors.emptyContent);
-      return;
-    }
-    try {
-      JSON.parse(pasted);
-    } catch {
-      setError(t.upload.errors.invalidJson);
-      return;
-    }
-    onAnalyze({ fileName: fileName || "package.json", content: pasted });
-  };
-
-  const filled = !!pasted;
+  const {
+    fileName,
+    pasted,
+    dragOver,
+    error,
+    filled,
+    inputRef,
+    onDrop,
+    onPick,
+    onPaste,
+    clear,
+    useSample,
+    setDragOver,
+    start,
+  } = useUpload();
 
   return (
     <section className={styles.upload}>
@@ -80,7 +33,23 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
         <header className={styles.header}>
           <div className={styles.eyebrow}>{t.upload.eyebrow}</div>
           <h1 className={styles.title}>{t.upload.title}</h1>
-          <p className={styles.subtitle}>{t.upload.subtitle}</p>
+          <p className={styles.subtitle}>
+            {t.upload.subtitle}
+            <br />
+            <span className={styles.subtitleSupports}>
+              {t.upload.subtitleSupportsLabel}{" "}
+              {t.upload.subtitleSections.map((s, i) => (
+                <span key={s}>
+                  <code className={styles.inlineCode}>{s}</code>
+                  {i < t.upload.subtitleSections.length - 2
+                    ? ", "
+                    : i === t.upload.subtitleSections.length - 2
+                      ? ", and "
+                      : "."}
+                </span>
+              ))}
+            </span>
+          </p>
         </header>
 
         <div className={styles.body}>
@@ -134,7 +103,18 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
 
           <div className={styles.codeInput}>
             <label htmlFor="paste">
-              <span>{t.upload.contentLabel}</span>
+              <span className={styles.labelLeft}>
+                {t.upload.contentLabel}
+                <span
+                  className={styles.infoTooltip}
+                  data-tooltip={t.upload.contentFormatTooltip}
+                  tabIndex={0}
+                  role="tooltip"
+                  aria-label={t.upload.contentFormatTooltip}
+                >
+                  ?
+                </span>
+              </span>
               <span className={styles.labelMeta}>
                 <button
                   type="button"
@@ -150,12 +130,7 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
               spellCheck={false}
               placeholder={t.upload.placeholder}
               value={pasted}
-              onChange={(e) => {
-                setPasted(e.target.value);
-                if (e.target.value && !fileName)
-                  setFileName("pasted-content.json");
-                setError("");
-              }}
+              onChange={(e) => onPaste(e.target.value)}
             />
           </div>
 
@@ -171,7 +146,7 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
           </div>
           <button
             className="btn btn--primary btn--lg"
-            onClick={start}
+            onClick={() => start(onAnalyze)}
             disabled={!filled}
           >
             {t.upload.startAnalysis}
