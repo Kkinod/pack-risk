@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import Upload from "@/features/package-analysis/views/Upload";
+import { useState, useRef } from "react";
+import Upload from "@/features/package-analysis/views/Upload/Upload";
 import Loading from "@/features/package-analysis/views/Loading";
 import Dashboard from "@/features/package-analysis/views/Dashboard";
 import { useAnalyze } from "@/features/package-analysis/api/useAnalyze";
 import type { Screen, AnalysisReport } from "@/features/package-analysis/types";
+import { useTheme } from "@/components/theme/useTheme";
 import { t } from "@/locales";
 import styles from "./AppShell.module.scss";
 
@@ -14,25 +15,7 @@ export default function AppShell() {
   const analyze = useAnalyze();
   const pendingPromise = useRef<Promise<AnalysisReport> | null>(null);
 
-  const [theme, setTheme] = useState<string>(() => {
-    if (typeof window === "undefined") return "dark";
-    try {
-      return localStorage.getItem("dra-theme") || "dark";
-    } catch {
-      return "dark";
-    }
-  });
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    try {
-      localStorage.setItem("dra-theme", theme);
-    } catch {}
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
+  const { theme, toggleTheme } = useTheme();
 
   const onAnalyze = (input: { fileName: string; content: string }) => {
     analyze.reset();
@@ -143,6 +126,22 @@ export default function AppShell() {
           <Dashboard report={analyze.data} density="normal" onReset={onReset} />
         )}
       </main>
+
+      <footer className={styles.pageFooter}>
+        <span>© {new Date().getFullYear()} PackRisk. All rights reserved.</span>
+        <span className={styles.pageFooterSep}>·</span>
+        <span>
+          Designed &amp; built by{" "}
+          <a
+            href="https://pawelek.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.pageFooterLink}
+          >
+            pawelek.dev
+          </a>
+        </span>
+      </footer>
     </div>
   );
 }

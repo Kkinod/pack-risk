@@ -8,6 +8,36 @@ interface PackageJson {
   optionalDependencies?: Record<string, string>;
 }
 
+const DEP_SECTION_KEYS = new Set([
+  "dependencies",
+  "devDependencies",
+  "peerDependencies",
+  "optionalDependencies",
+]);
+
+const VERSION_LIKE = /^[\^~>=<*]|\d+\.\d+/;
+
+function looksLikeVersionMap(obj: Record<string, unknown>): boolean {
+  const entries = Object.entries(obj);
+  if (entries.length === 0) return false;
+  return entries.every(
+    ([, v]) => typeof v === "string" && VERSION_LIKE.test(v)
+  );
+}
+
+function tryAutoWrap(manifest: Record<string, unknown>): PackageJson {
+  const hasKnownSection = Object.keys(manifest).some((k) =>
+    DEP_SECTION_KEYS.has(k)
+  );
+  if (hasKnownSection) return manifest as PackageJson;
+
+  if (looksLikeVersionMap(manifest)) {
+    return { dependencies: manifest as Record<string, string> };
+  }
+
+  return manifest as PackageJson;
+}
+
 export interface ExtractedDep {
   name: string;
   version: string;
@@ -19,16 +49,25 @@ function stripRangeOperator(rawVersion: string): string {
   return /^\d/.test(cleaned) ? cleaned : rawVersion;
 }
 
+function tryParseJson(content: string): unknown {
+  try {
+    return JSON.parse(content);
+  } catch {
+    // ignore
+  }
+  try {
+    return JSON.parse(`{${content}}`);
+  } catch {
+    // ignore
+  }
+  throw new Error("Invalid JSON");
+}
+
 export function parseManifest(content: string): {
   name: string;
   deps: ExtractedDep[];
 } {
-  let manifest: PackageJson;
-  try {
-    manifest = JSON.parse(content);
-  } catch {
-    throw new Error("Invalid JSON");
-  }
+  const manifest = tryParseJson(content);
 
   if (
     typeof manifest !== "object" ||
@@ -38,6 +77,7 @@ export function parseManifest(content: string): {
     throw new Error("Invalid package.json: root must be an object");
   }
 
+  const normalized = tryAutoWrap(manifest as Record<string, unknown>);
   const deps: ExtractedDep[] = [];
 
   const add = (record: Record<string, string> | undefined, type: DepType) => {
@@ -48,14 +88,14 @@ export function parseManifest(content: string): {
     }
   };
 
-  add(manifest.dependencies, "prod");
-  add(manifest.devDependencies, "dev");
-  add(manifest.peerDependencies, "peer");
-  add(manifest.optionalDependencies, "optional");
+  add(normalized.dependencies, "prod");
+  add(normalized.devDependencies, "dev");
+  add(normalized.peerDependencies, "peer");
+  add(normalized.optionalDependencies, "optional");
 
   if (deps.length === 0) {
     throw new Error("No dependencies found in package.json");
   }
 
-  return { name: manifest.name ?? "unknown", deps };
+  return { name: normalized.name ?? "unknown", deps };
 }
