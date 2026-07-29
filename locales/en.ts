@@ -22,6 +22,13 @@ export const en = {
     title: "Analyze your package.json for security risk",
     subtitle:
       "Upload a package.json file and we'll cross-reference its dependencies against public vulnerability databases to surface critical issues, outdated packages, and recommended fixes.",
+    subtitleSupportsLabel: "Supports",
+    subtitleSections: [
+      "dependencies",
+      "devDependencies",
+      "peerDependencies",
+      "optionalDependencies",
+    ] as string[],
     dropzone: {
       title: "Drop package.json here",
       sub: "or click to browse — .json files only",
@@ -29,6 +36,8 @@ export const en = {
     },
     divider: "or paste content",
     contentLabel: "package.json content",
+    contentFormatTooltip:
+      'Accepted formats:\n• Full package.json file\n• Object with "dependencies", "devDependencies", "peerDependencies" or "optionalDependencies" sections\n• Bare map of package names to versions: { "react": "^18.0.0", ... }\n• Raw lines without braces: "react": "^18.0.0", ...',
     loadSample: "Load sample →",
     placeholder: '{\n  "name": "my-app",\n  "dependencies": { ... }\n}',
     hint: "Your file is processed locally — nothing is uploaded.",
