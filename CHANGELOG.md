@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.2.0] - 2026-07-29
+
+### Added
+
+- Manual Entry mode in the upload view — users can add packages by name and version via dynamic input fields without uploading a file
+- Mode switcher (File / Paste ↔ Manual Entry) with smooth sliding segmented control
+- Hero section above the upload card with title, subtitle, and audience label
+- Page footer with copyright and link to author's website
+
+### Changed
+
+- `parseManifest` now accepts partial JSON (bare object without `dependencies` key) and raw key-value pairs without outer braces — input is auto-normalized before parsing
+- Content format tooltip updated to reflect all accepted input formats
+- Theme state now uses `useSyncExternalStore` — eliminates `useEffect`/`setState` pattern and avoids cascading re-renders
+- Upload view code split into `useUpload` and `useManualEntry` hooks and a dedicated `ManualEntry` component
+
+### Fixed
+
+- Theme hydration mismatch — inline script in `layout.tsx` sets `data-theme` before React hydrates, preventing flash of wrong theme on page load
+- Manual Entry inputs now wrap to separate rows on narrow screens with correct alignment
+- `modeTabs` margin kept in sync with `body` padding across all responsive breakpoints — version input no longer visually overflows the mode switcher at widths below 900px
+
 ## [0.11.1] - 2026-05-17
 
 ### Fixed
