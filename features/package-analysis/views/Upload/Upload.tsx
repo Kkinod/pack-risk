@@ -28,30 +28,27 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
 
   return (
     <section className={styles.upload}>
-      <div className={styles.card}>
-        <header className={styles.header}>
-          <div className={styles.eyebrow}>{t.upload.eyebrow}</div>
-          <h1 className={styles.title}>{t.upload.title}</h1>
-          <p className={styles.subtitle}>
-            {t.upload.subtitle}
-            <br />
-            <span className={styles.subtitleSupports}>
-              {t.upload.subtitleSupportsLabel}{" "}
-              {t.upload.subtitleSections.map((s, i) => (
-                <span key={s}>
-                  <code className={styles.inlineCode}>{s}</code>
-                  {i < t.upload.subtitleSections.length - 2
-                    ? ", "
-                    : i === t.upload.subtitleSections.length - 2
-                      ? ", and "
-                      : "."}
-                </span>
-              ))}
-            </span>
-          </p>
-        </header>
+      <div className={styles.hero}>
+        <div className={styles.heroBadge}>
+          <span className={styles.heroBadgeDot} />
+          {t.upload.heroBadge}
+        </div>
+        <h1 className={styles.heroTitle}>{t.upload.heroTitle}</h1>
+        <p className={styles.heroSubtitle}>
+          {t.upload.heroSubtitle}{" "}
+          <strong className={styles.heroSubtitleBold}>
+            {t.upload.heroSubtitleBold}
+          </strong>{" "}
+          {t.upload.heroSubtitleRest}
+        </p>
+        <p className={styles.heroAudience}>{t.upload.heroAudience}</p>
+      </div>
 
-        <div className={styles.modeTabs}>
+      <div className={styles.card}>
+        <div
+          className={styles.modeTabs}
+          data-active={mode === "file" ? "0" : "1"}
+        >
           <button
             type="button"
             className={`${styles.modeTab} ${mode === "file" ? styles.modeTabActive : ""}`}

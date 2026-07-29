@@ -19,6 +19,13 @@ export const en = {
   },
   upload: {
     eyebrow: "Step 1 — Source",
+    heroBadge: "No install required · Zero setup",
+    heroTitle: "Check how risky your project's dependencies are",
+    heroSubtitle: "Upload a",
+    heroSubtitleBold: "package.json",
+    heroSubtitleRest:
+      "and PackRisk will surface vulnerabilities, score risk on a 0–100 scale, and tell you exactly what to fix — in plain language anyone can understand.",
+    heroAudience: "Built for developers, PMs, testers, and security teams.",
     title: "Analyze your package.json for security risk",
     subtitle:
       "Upload a package.json file and we'll cross-reference its dependencies against public vulnerability databases to surface critical issues, outdated packages, and recommended fixes.",
