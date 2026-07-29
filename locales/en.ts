@@ -48,6 +48,19 @@ export const en = {
       invalidJson: "Invalid JSON. Please check the file content.",
       analysisFailed:
         "Analysis failed. Please check your connection and try again.",
+      manualEntryEmpty: "Add at least one package to analyze.",
+      manualEntryInvalidRow: "Every package must have a name and version.",
+    },
+    modes: {
+      filePaste: "File / Paste",
+      manualEntry: "Manual entry",
+    },
+    manualEntry: {
+      namePlaceholder: "Package name, e.g. react",
+      versionPlaceholder: "Version, e.g. 18.0.0",
+      addPackage: "+ Add package",
+      removeAriaLabel: "Remove package",
+      startAnalysis: "Start analysis",
     },
   },
   loading: {
