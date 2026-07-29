@@ -26,10 +26,23 @@
   width: 16px;
   text-align: right;
   flex-shrink: 0;
+  align-self: flex-start;
+  padding-top: 10px;
+}
+
+.inputs {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 }
 
 .input {
   flex: 1;
+  min-width: 0;
   font-family: var(--font-mono, monospace);
   font-size: 13px;
   background: var(--bg-elev-2);
@@ -54,7 +67,12 @@
 
 .inputVersion {
   max-width: 140px;
-  flex: 0 0 140px;
+  flex: 0 1 140px;
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+    flex: 1;
+  }
 }
 
 .removeBtn {
@@ -67,6 +85,8 @@
   align-items: center;
   cursor: pointer;
   flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 4px;
 
   &:hover {
     color: var(--risk-high);

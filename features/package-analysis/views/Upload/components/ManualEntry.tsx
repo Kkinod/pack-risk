@@ -26,22 +26,24 @@ export function ManualEntry({
         {rows.map((row, i) => (
           <li key={row.id} className={styles.row}>
             <span className={styles.rowIndex}>{i + 1}</span>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder={t.upload.manualEntry.namePlaceholder}
-              value={row.name}
-              onChange={(e) => onUpdate(row.id, "name", e.target.value)}
-              aria-label={`Package name ${i + 1}`}
-            />
-            <input
-              className={`${styles.input} ${styles.inputVersion}`}
-              type="text"
-              placeholder={t.upload.manualEntry.versionPlaceholder}
-              value={row.version}
-              onChange={(e) => onUpdate(row.id, "version", e.target.value)}
-              aria-label={`Version ${i + 1}`}
-            />
+            <div className={styles.inputs}>
+              <input
+                className={styles.input}
+                type="text"
+                placeholder={t.upload.manualEntry.namePlaceholder}
+                value={row.name}
+                onChange={(e) => onUpdate(row.id, "name", e.target.value)}
+                aria-label={`Package name ${i + 1}`}
+              />
+              <input
+                className={`${styles.input} ${styles.inputVersion}`}
+                type="text"
+                placeholder={t.upload.manualEntry.versionPlaceholder}
+                value={row.version}
+                onChange={(e) => onUpdate(row.id, "version", e.target.value)}
+                aria-label={`Version ${i + 1}`}
+              />
+            </div>
             {rows.length > 1 && (
               <button
                 type="button"

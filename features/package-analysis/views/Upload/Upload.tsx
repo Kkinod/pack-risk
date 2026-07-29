@@ -18,11 +18,25 @@ interface UploadProps {
 export default function Upload({ onAnalyze, serverError }: UploadProps) {
   const [mode, setMode] = useState<UploadMode>("file");
 
-  const upload = useUpload();
+  const {
+    inputRef,
+    filled,
+    error: uploadError,
+    fileName,
+    dragOver,
+    pasted,
+    onDrop,
+    onPick,
+    onPaste,
+    clear,
+    useSample,
+    setDragOver,
+    start: startUpload,
+  } = useUpload();
   const manual = useManualEntry();
 
   const handleStart = () => {
-    if (mode === "file") upload.start(onAnalyze);
+    if (mode === "file") startUpload(onAnalyze);
     else manual.start(onAnalyze);
   };
 
@@ -68,31 +82,31 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
         {mode === "file" && (
           <div className={styles.body}>
             <div
-              className={`${styles.dropzone} ${upload.dragOver ? styles.dropzoneActive : ""} ${upload.filled ? styles.dropzoneFilled : ""}`}
-              onClick={() => upload.inputRef.current?.click()}
+              className={`${styles.dropzone} ${dragOver ? styles.dropzoneActive : ""} ${filled ? styles.dropzoneFilled : ""}`}
+              onClick={() => inputRef.current?.click()}
               onDragOver={(e) => {
                 e.preventDefault();
-                upload.setDragOver(true);
+                setDragOver(true);
               }}
-              onDragLeave={() => upload.setDragOver(false)}
-              onDrop={upload.onDrop}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={onDrop}
               role="button"
               tabIndex={0}
             >
               <input
-                ref={upload.inputRef}
+                ref={inputRef}
                 type="file"
                 accept=".json,application/json"
-                onChange={upload.onPick}
+                onChange={onPick}
                 style={{ display: "none" }}
               />
-              {upload.filled ? (
+              {filled ? (
                 <div className={styles.dropzoneFile}>
                   <IconFile size={16} />
-                  <span>{upload.fileName}</span>
+                  <span>{fileName}</span>
                   <button
                     className={styles.clearBtn}
-                    onClick={upload.clear}
+                    onClick={clear}
                     aria-label={t.upload.dropzone.removeFile}
                   >
                     <IconX size={14} />
@@ -133,7 +147,7 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
                   <button
                     type="button"
                     className={styles.sampleBtn}
-                    onClick={upload.useSample}
+                    onClick={useSample}
                   >
                     {t.upload.loadSample}
                   </button>
@@ -143,14 +157,14 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
                 id="paste"
                 spellCheck={false}
                 placeholder={t.upload.placeholder}
-                value={upload.pasted}
-                onChange={(e) => upload.onPaste(e.target.value)}
+                value={pasted}
+                onChange={(e) => onPaste(e.target.value)}
               />
             </div>
 
-            {(upload.error || serverError) && (
+            {(uploadError || serverError) && (
               <div className={styles.errorMsg}>
-                {upload.error || serverError}
+                {uploadError || serverError}
               </div>
             )}
           </div>
@@ -177,7 +191,7 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
           <button
             className="btn btn--primary btn--lg"
             onClick={handleStart}
-            disabled={mode === "file" && !upload.filled}
+            disabled={mode === "file" && !filled}
           >
             {t.upload.startAnalysis}
           </button>

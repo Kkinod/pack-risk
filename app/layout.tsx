@@ -31,6 +31,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('dra-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}`,
+          }}
+        />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
