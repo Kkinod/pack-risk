@@ -56,7 +56,7 @@ export function useManualEntry(): UseManualEntryReturn {
       return;
     }
 
-    const invalid = filled.find((r) => !r.name.trim() || !r.version.trim());
+    const invalid = filled.find((r) => !r.name.trim());
     if (invalid) {
       setError(t.upload.errors.manualEntryInvalidRow);
       return;
@@ -64,7 +64,7 @@ export function useManualEntry(): UseManualEntryReturn {
 
     const deps: Record<string, string> = {};
     for (const row of filled) {
-      deps[row.name.trim()] = row.version.trim();
+      deps[row.name.trim()] = row.version.trim() || "*";
     }
 
     const content = JSON.stringify({ dependencies: deps }, null, 2);
