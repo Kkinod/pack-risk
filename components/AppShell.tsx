@@ -1,21 +1,20 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Upload from "@/features/package-analysis/views/Upload/Upload";
 import Loading from "@/features/package-analysis/views/Loading";
-import Dashboard from "@/features/package-analysis/views/Dashboard";
 import { useAnalyze } from "@/features/package-analysis/api/useAnalyze";
-import type { Screen, AnalysisReport } from "@/features/package-analysis/types";
-import { useTheme } from "@/components/theme/useTheme";
+import { saveReport } from "@/features/package-analysis/utils/reportStorage";
+import type { AnalysisReport } from "@/features/package-analysis/types";
 import { t } from "@/locales";
-import styles from "./AppShell.module.scss";
+import Shell from "./Shell";
 
 export default function AppShell() {
-  const [screen, setScreen] = useState<Screen>("upload");
+  const router = useRouter();
+  const [screen, setScreen] = useState<"upload" | "loading">("upload");
   const analyze = useAnalyze();
   const pendingPromise = useRef<Promise<AnalysisReport> | null>(null);
-
-  const { theme, toggleTheme } = useTheme();
 
   const onAnalyze = (input: { fileName: string; content: string }) => {
     analyze.reset();
@@ -26,18 +25,16 @@ export default function AppShell() {
 
   const onComplete = async () => {
     try {
-      await pendingPromise.current;
-      setScreen("dashboard");
+      const report = await pendingPromise.current;
+      if (report) {
+        saveReport(report);
+        router.push("/report");
+      }
     } catch {
       setScreen("upload");
     } finally {
       pendingPromise.current = null;
     }
-  };
-
-  const onReset = () => {
-    analyze.reset();
-    setScreen("upload");
   };
 
   const serverError =
@@ -46,102 +43,11 @@ export default function AppShell() {
       : undefined;
 
   return (
-    <div className={styles.app}>
-      <header className={styles.topbar}>
-        <div className={styles.brand}>
-          <div className={styles.brandMark}>PR</div>
-          <div>
-            <div className={styles.brandName}>{t.shell.brandName}</div>
-          </div>
-          <span className={styles.brandTag}>{t.shell.brandTag}</span>
-        </div>
-        <nav className={styles.nav} aria-label={t.shell.nav.progressLabel}>
-          <span
-            className={`${styles.navStep} ${screen === "upload" ? styles.navStepActive : ""}`}
-          >
-            <span className={styles.dot} /> {t.shell.nav.upload}
-          </span>
-          <span className={styles.navSep}>›</span>
-          <span
-            className={`${styles.navStep} ${screen === "loading" ? styles.navStepActive : ""}`}
-          >
-            <span className={styles.dot} /> {t.shell.nav.analyze}
-          </span>
-          <span className={styles.navSep}>›</span>
-          <span
-            className={`${styles.navStep} ${screen === "dashboard" ? styles.navStepActive : ""}`}
-          >
-            <span className={styles.dot} /> {t.shell.nav.report}
-          </span>
-          <button
-            type="button"
-            className={styles.themeToggle}
-            onClick={toggleTheme}
-            aria-label={
-              theme === "dark"
-                ? t.shell.theme.toLightLabel
-                : t.shell.theme.toDarkLabel
-            }
-          >
-            {theme === "dark" ? (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="12" r="4" />
-                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-              </svg>
-            ) : (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-              </svg>
-            )}
-          </button>
-        </nav>
-      </header>
-
-      <main className={styles.main}>
-        {screen === "upload" && (
-          <Upload onAnalyze={onAnalyze} serverError={serverError} />
-        )}
-        {screen === "loading" && <Loading onComplete={onComplete} />}
-        {screen === "dashboard" && analyze.data && (
-          <Dashboard report={analyze.data} density="normal" onReset={onReset} />
-        )}
-      </main>
-
-      <footer className={styles.pageFooter}>
-        <span>© {new Date().getFullYear()} PackRisk. All rights reserved.</span>
-        <span className={styles.pageFooterSep}>·</span>
-        <span>
-          Designed &amp; built by{" "}
-          <a
-            href="https://pawelek.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.pageFooterLink}
-          >
-            pawelek.dev
-          </a>
-        </span>
-      </footer>
-    </div>
+    <Shell step={screen}>
+      {screen === "upload" && (
+        <Upload onAnalyze={onAnalyze} serverError={serverError} />
+      )}
+      {screen === "loading" && <Loading onComplete={onComplete} />}
+    </Shell>
   );
 }

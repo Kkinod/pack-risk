@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this section.
 
+## [0.4.0] - 2026-08-01
+
+### Added
+
+- Report is now available as its own page, directly accessible at `/report`
+
+### Changed
+
+- Report stays available across page refresh within the same browser session
+
+## [0.3.0] - 2026-08-01
+
+### Changed
+
+- Refreshed global visual style — colors, spacing, and typography updated across the app
+- Polished upload view UI
+- Improved accessibility throughout
+
 ## [0.2.0] - 2026-07-29
 
 ### Added
