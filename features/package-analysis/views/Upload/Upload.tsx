@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { IconUpload, IconFile, IconX, IconShield } from "@/components/ui/icons";
+import { IconUpload, IconFile, IconX } from "@/components/ui/icons";
 import { useUpload } from "./hooks/useUpload";
 import { useManualEntry } from "./hooks/useManualEntry";
 import { ManualEntry } from "./components/ManualEntry";
@@ -143,15 +143,6 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
                     ?
                   </span>
                 </span>
-                <span className={styles.labelMeta}>
-                  <button
-                    type="button"
-                    className={styles.sampleBtn}
-                    onClick={useSample}
-                  >
-                    {t.upload.loadSample}
-                  </button>
-                </span>
               </label>
               <textarea
                 id="paste"
@@ -184,10 +175,14 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
         )}
 
         <footer className={styles.footer}>
-          <div className={styles.hint}>
-            <IconShield size={14} />
-            <span>{t.upload.hint}</span>
-          </div>
+          <button
+            type="button"
+            className={styles.sampleBtn}
+            onClick={useSample}
+          >
+            {t.upload.loadSample}
+          </button>
+          <span className={styles.sampleHint}>{t.upload.loadSampleHint}</span>
           <button
             className="btn btn--primary btn--lg"
             onClick={handleStart}
@@ -197,6 +192,11 @@ export default function Upload({ onAnalyze, serverError }: UploadProps) {
           </button>
         </footer>
       </div>
+
+      <aside className={styles.aside}>
+        <span className={styles.asideBadge}>{t.upload.hintBadge}</span>
+        <p className={styles.asideText}>{t.upload.hint}</p>
+      </aside>
     </section>
   );
 }

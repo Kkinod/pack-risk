@@ -15,19 +15,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .heroBadge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  font-family: var(--font-mono, monospace);
   font-size: 12px;
-  color: var(--text-muted);
-  background: var(--bg-elev-1);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 5px 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
 }
 
 .heroBadgeDot {
@@ -39,10 +39,11 @@
 }
 
 .heroTitle {
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  font-family: var(--font-serif, "Newsreader", serif);
+  font-size: clamp(30px, 4.5vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.12;
   margin: 0;
   max-width: 600px;
 }
@@ -59,9 +60,9 @@
   font-family: var(--font-mono, monospace);
   font-size: 13px;
   font-weight: 600;
-  color: var(--text);
-  background: var(--bg-elev-2);
-  border: 1px solid var(--border);
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft);
   border-radius: 4px;
   padding: 1px 5px;
 }
@@ -78,7 +79,9 @@
   background: var(--bg-elev-1);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
+  box-shadow:
+    0 2px 4px rgba(33, 29, 24, 0.06),
+    0 16px 40px -12px rgba(33, 29, 24, 0.16);
   overflow: hidden;
 }
 
@@ -115,7 +118,7 @@
   }
 
   &[data-active="1"]::before {
-    transform: translateX(calc(100% + 2px));
+    transform: translateX(100%);
   }
 }
 
@@ -161,22 +164,72 @@
 }
 
 .footer {
-  padding: 18px 36px;
-  border-top: 1px solid var(--border);
-  background: var(--bg-elev-2);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 20px 36px;
+  border-top: 1px solid var(--border);
 }
 
-.hint {
+.sampleBtn {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    border-color 0.12s,
+    color 0.12s;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+}
+
+.sampleHint {
+  font-size: 13px;
   color: var(--text-subtle);
-  font-size: 12px;
+  margin-right: auto;
+}
+
+.aside {
+  width: 100%;
+  max-width: 720px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 4px;
+}
+
+.asideBadge {
+  flex-shrink: 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft);
+  border-radius: 99px;
+  padding: 5px 10px;
+}
+
+.asideText {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text-muted);
 }
 
 .dropzone {
@@ -293,12 +346,6 @@
   }
 }
 
-.labelMeta {
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  color: var(--text-subtle);
-}
-
 .labelLeft {
   display: flex;
   align-items: center;
@@ -357,17 +404,6 @@
   }
 }
 
-.sampleBtn {
-  background: transparent;
-  border: none;
-  color: var(--accent);
-  cursor: pointer;
-  padding: 0;
-  font: inherit;
-  font-size: 11px;
-  font-family: var(--font-mono, monospace);
-}
-
 .errorMsg {
   color: var(--risk-high);
   font-size: 13px;
@@ -387,20 +423,9 @@
   .modeTabs {
     margin: 28px 28px 0;
   }
-  .heroTitle {
-    font-size: 28px;
-  }
 }
 
 @media (max-width: 640px) {
-  .upload {
-    padding: 32px 14px 24px;
-    gap: 24px;
-  }
-  .heroTitle {
-    font-size: 22px;
-    line-height: 1.25;
-  }
   .heroSubtitle {
     font-size: 13px;
   }
@@ -414,6 +439,10 @@
     padding: 14px 20px;
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
+  }
+  .sampleHint {
+    display: none;
   }
   .footer :global(.btn) {
     width: 100%;
@@ -432,11 +461,5 @@
   .codeInput textarea {
     font-size: 12px;
     min-height: 120px;
-  }
-}
-
-@media (max-width: 420px) {
-  .heroTitle {
-    font-size: 19px;
   }
 }

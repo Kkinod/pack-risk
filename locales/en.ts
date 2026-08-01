@@ -4,8 +4,8 @@ export const en = {
     description: "Analyze package.json for security risks",
   },
   shell: {
-    brandName: "Dependency Risk Analyzer",
-    brandTag: "v0.3 · MVP",
+    brandName: "Pack Risk",
+    brandTag: "v0.2",
     nav: {
       progressLabel: "Progress",
       upload: "Upload",
@@ -18,25 +18,14 @@ export const en = {
     },
   },
   upload: {
-    eyebrow: "Step 1 — Source",
-    heroBadge: "No install required · Zero setup",
-    heroTitle: "Check how risky your project's dependencies are",
-    heroSubtitle: "Upload a",
+    heroBadge: "No installation or repository access required",
+    heroTitle: "Find vulnerabilities in your project dependencies",
+    heroSubtitle: "Upload or paste your",
     heroSubtitleBold: "package.json",
     heroSubtitleRest:
-      "and PackRisk will surface vulnerabilities, give you an overall risk overview, and tell you exactly what to fix — with clear, actionable recommendations.",
+      ", or enter dependencies manually, to identify vulnerable packages, understand the overall risk, and get clear recommendations on what to update first.",
     heroAudience:
-      "For anyone who wants to know what risks are hiding in their dependencies.",
-    title: "Analyze your package.json for security risk",
-    subtitle:
-      "Upload a package.json file and we'll cross-reference its dependencies against public vulnerability databases to surface critical issues, outdated packages, and recommended fixes.",
-    subtitleSupportsLabel: "Supports",
-    subtitleSections: [
-      "dependencies",
-      "devDependencies",
-      "peerDependencies",
-      "optionalDependencies",
-    ] as string[],
+      "A simple way to understand the security risk in your project dependencies.",
     dropzone: {
       title: "Drop package.json here",
       sub: "or click to browse — .json files only",
@@ -46,9 +35,11 @@ export const en = {
     contentLabel: "package.json content",
     contentFormatTooltip:
       'Accepted formats:\n• Full package.json file\n• Object with "dependencies", "devDependencies", "peerDependencies" or "optionalDependencies" sections\n• Bare map of package names to versions: { "react": "^18.0.0", ... }\n• Raw lines without braces: "react": "^18.0.0", ...',
-    loadSample: "Load sample →",
+    loadSample: "Load sample",
+    loadSampleHint: "Try it with an example project first.",
     placeholder: '{\n  "name": "my-app",\n  "dependencies": { ... }\n}',
-    hint: "Your file is processed locally — nothing is uploaded.",
+    hint: "Your file is processed locally in the browser. Nothing is uploaded, stored, or shared.",
+    hintBadge: "Runs locally",
     startAnalysis: "Start analysis",
     errors: {
       jsonFileOnly: "Please upload a .json file.",
@@ -68,7 +59,6 @@ export const en = {
       versionPlaceholder: "Version, e.g. 18.0.0",
       addPackage: "+ Add package",
       removeAriaLabel: "Remove package",
-      startAnalysis: "Start analysis",
     },
   },
   loading: {
