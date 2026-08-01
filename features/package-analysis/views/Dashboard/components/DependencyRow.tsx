@@ -36,7 +36,9 @@ export function DependencyRow({
             )}
             <span className={styles.pkgName}>{dep.name}</span>
             {dep.type !== "prod" && (
-              <span className={styles.pkgType}>{dep.type}</span>
+              <span className={styles.pkgType}>
+                {t.topIssues.depType[dep.type]}
+              </span>
             )}
           </div>
         </td>
@@ -85,7 +87,7 @@ export function DependencyRow({
                       <span className={styles.cveMeta}>
                         {v.cvss !== undefined && (
                           <span className={styles.cvss}>
-                            CVSS {v.cvss.toFixed(1)}
+                            {t.dashboard.depRow.cvssLabel(v.cvss)}
                           </span>
                         )}
                         <RiskTag level={v.severity as RiskLevel} />

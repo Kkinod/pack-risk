@@ -33,7 +33,7 @@ export function ManualEntry({
                 placeholder={t.upload.manualEntry.namePlaceholder}
                 value={row.name}
                 onChange={(e) => onUpdate(row.id, "name", e.target.value)}
-                aria-label={`Package name ${i + 1}`}
+                aria-label={t.upload.manualEntry.nameAriaLabel(i + 1)}
               />
               <input
                 className={`${styles.input} ${styles.inputVersion}`}
@@ -41,7 +41,7 @@ export function ManualEntry({
                 placeholder={t.upload.manualEntry.versionPlaceholder}
                 value={row.version}
                 onChange={(e) => onUpdate(row.id, "version", e.target.value)}
-                aria-label={`Version ${i + 1}`}
+                aria-label={t.upload.manualEntry.versionAriaLabel(i + 1)}
               />
             </div>
             {rows.length > 1 && (

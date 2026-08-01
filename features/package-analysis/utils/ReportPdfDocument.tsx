@@ -54,7 +54,7 @@ export function ReportPdfDocument({ data }: { data: ReportExport }) {
   const projectName = meta.projectName || meta.fileName;
 
   return (
-    <Document title={t.pdf.docTitle(projectName)} author="Pack Risk">
+    <Document title={t.pdf.docTitle(projectName)} author={t.pdf.author}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.eyebrow}>{t.pdf.eyebrow}</Text>
