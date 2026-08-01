@@ -1,4 +1,5 @@
 import { scoreToMeta } from "../../../utils/risk";
+import { t } from "@/locales";
 import styles from "./RiskGauge.module.scss";
 
 export function RiskGauge({ score }: { score: number }) {
@@ -39,7 +40,7 @@ export function RiskGauge({ score }: { score: number }) {
       </svg>
       <div className={styles.gaugeLabel}>
         <span className={styles.gaugeNum}>{score}</span>
-        <span className={styles.gaugeOf}>/ 100</span>
+        <span className={styles.gaugeOf}>{t.dashboard.riskGauge.outOf100}</span>
       </div>
     </div>
   );

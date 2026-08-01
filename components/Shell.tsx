@@ -92,17 +92,16 @@ export default function Shell({ step, children }: ShellProps) {
       <main className={styles.main}>{children}</main>
 
       <footer className={styles.pageFooter}>
-        <span>© {new Date().getFullYear()} PackRisk. All rights reserved.</span>
-        <span className={styles.pageFooterSep}>·</span>
+        <span>{t.shell.footer.copyright(new Date().getFullYear())}</span>
         <span>
-          Designed &amp; built by{" "}
+          {t.shell.footer.builtBy}{" "}
           <a
             href="https://pawelek.dev"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.pageFooterLink}
           >
-            pawelek.dev
+            {t.shell.footer.authorLinkText}
           </a>
         </span>
       </footer>

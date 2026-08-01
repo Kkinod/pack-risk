@@ -16,6 +16,11 @@ export const en = {
       toLightLabel: "Switch to light theme",
       toDarkLabel: "Switch to dark theme",
     },
+    footer: {
+      copyright: (year: number) => `© ${year} PackRisk. All rights reserved.`,
+      builtBy: "Designed & built by",
+      authorLinkText: "pawelek.dev",
+    },
   },
   upload: {
     heroBadge: "No installation or repository access required",
@@ -59,6 +64,8 @@ export const en = {
       versionPlaceholder: "Version, e.g. 18.0.0",
       addPackage: "+ Add package",
       removeAriaLabel: "Remove package",
+      nameAriaLabel: (n: number) => `Package name ${n}`,
+      versionAriaLabel: (n: number) => `Version ${n}`,
     },
   },
   loading: {
@@ -100,6 +107,9 @@ export const en = {
       dependencies: "Dependencies",
       vulnerabilities: "Vulnerabilities by severity",
     },
+    riskGauge: {
+      outOf100: "/ 100",
+    },
     stats: {
       withVulns: "with known vulnerabilities",
       packagesClean: "packages clean",
@@ -128,6 +138,7 @@ export const en = {
     depRow: {
       knownVulns: (n: number) => `${n} known vulnerabilities`,
       latestUnknown: "Unknown",
+      cvssLabel: (score: number) => `CVSS ${score.toFixed(1)}`,
       links: {
         osv: "OSV",
         ghsa: "GHSA",
@@ -288,6 +299,7 @@ export const en = {
       }`,
   },
   pdf: {
+    author: "Pack Risk",
     docTitle: (name: string) => `Pack Risk Report — ${name}`,
     eyebrow: "Pack Risk Report",
     sourceLabel: (fileName: string) => `Source: ${fileName}`,

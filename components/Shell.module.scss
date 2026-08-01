@@ -153,7 +153,7 @@
 .pageFooter {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
   padding: 20px 24px;
   border-top: 1px solid var(--border);
@@ -229,5 +229,11 @@
   }
   .themeToggle {
     margin-left: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageFooter {
+    flex-direction: column;
   }
 }
