@@ -1,3 +1,5 @@
+@use "../../../styles/breakpoints" as *;
+
 .loading {
   flex: 1;
   display: flex;
@@ -154,13 +156,13 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: $bp-900) {
   .card {
     padding: 28px 28px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: $bp-640) {
   .loading {
     padding: 28px 14px;
   }

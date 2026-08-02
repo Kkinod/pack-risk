@@ -1,3 +1,5 @@
+@use "../../../../../styles/breakpoints" as *;
+
 .manualEntry {
   display: flex;
   flex-direction: column;
@@ -35,7 +37,7 @@
   flex: 1;
   gap: 8px;
 
-  @media (max-width: 480px) {
+  @media (max-width: $bp-480) {
     flex-direction: column;
   }
 }
@@ -69,7 +71,7 @@
   max-width: 140px;
   flex: 0 1 140px;
 
-  @media (max-width: 480px) {
+  @media (max-width: $bp-480) {
     max-width: 100%;
     flex: 1;
   }
