@@ -1,3 +1,5 @@
+@use "../../../../../styles/breakpoints" as *;
+
 .deps {
   background: var(--bg-elev-1);
   border: 1px solid var(--border);
@@ -18,6 +20,7 @@
 .search {
   position: relative;
   flex: 1;
+  min-width: 0;
   max-width: 320px;
 
   svg {
@@ -149,7 +152,7 @@
   color: var(--text-muted);
 }
 
-@media (max-width: 900px) {
+@media (max-width: $bp-900) {
   .toolbar {
     padding: 14px 16px;
   }
@@ -162,7 +165,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: $bp-760) {
   .toolbar {
     flex-direction: column;
     align-items: stretch;
@@ -172,20 +175,8 @@
   .search {
     max-width: none;
   }
-  .filters {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
-    margin: 0 -14px;
-    padding: 0 14px 2px;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
   .filter {
     white-space: nowrap;
-    flex-shrink: 0;
   }
   .tableWrap {
     table {

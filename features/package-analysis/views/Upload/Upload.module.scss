@@ -1,3 +1,5 @@
+@use "../../../../styles/breakpoints" as *;
+
 .upload {
   flex: 1;
   display: flex;
@@ -413,7 +415,7 @@
   border-radius: 6px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: $bp-900) {
   .body {
     padding: 20px 28px 28px;
   }
@@ -425,7 +427,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: $bp-640) {
   .heroSubtitle {
     font-size: 13px;
   }

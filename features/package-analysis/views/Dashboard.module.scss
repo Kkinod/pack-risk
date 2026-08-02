@@ -1,3 +1,5 @@
+@use "../../../styles/breakpoints" as *;
+
 .dash {
   flex: 1;
   display: flex;
@@ -55,11 +57,11 @@
   grid-template-columns: 1.4fr 1fr 1fr;
   gap: 16px;
 
-  @media (max-width: 1100px) {
+  @media (max-width: $bp-1100) {
     grid-template-columns: 1fr 1fr;
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: $bp-760) {
     grid-template-columns: 1fr;
   }
 }
@@ -143,7 +145,7 @@
   margin-top: 12px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: $bp-900) {
   .dash {
     padding: 22px 20px 40px;
     gap: 20px;
@@ -163,7 +165,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: $bp-640) {
   .dash {
     padding: 18px 14px 36px;
     gap: 18px;
@@ -207,7 +209,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: $bp-420) {
   .breakdown {
     grid-template-columns: repeat(2, 1fr);
   }

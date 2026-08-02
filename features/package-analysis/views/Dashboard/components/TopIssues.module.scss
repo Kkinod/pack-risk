@@ -1,3 +1,5 @@
+@use "../../../../../styles/breakpoints" as *;
+
 .section {
   background: var(--bg-elev-1);
   border: 1px solid var(--border);
@@ -106,7 +108,7 @@
   font-style: italic;
 }
 
-@media (max-width: 640px) {
+@media (max-width: $bp-640) {
   .section {
     padding: 16px;
   }

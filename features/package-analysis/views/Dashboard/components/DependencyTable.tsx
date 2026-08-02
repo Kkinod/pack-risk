@@ -51,6 +51,8 @@ export function DependencyTable({
           <IconSearch size={14} />
           <input
             type="text"
+            id="dependency-search"
+            name="dependency-search"
             placeholder={t.dashboard.depTable.search}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
